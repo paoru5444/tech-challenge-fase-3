@@ -1,5 +1,6 @@
 import inter from "@/assets/fonts/inter/Inter-VariableFont_opsz,wght.ttf";
 import Deposit from "@/assets/icons/deposit.png";
+import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Badge from "@/src/components/ui/bedge";
 import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
@@ -99,6 +100,11 @@ export default function Home() {
         minHeight: 66,
         paddingHorizontal: 16,
         borderRadius: 15,
+        elevation: 5,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 32,
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -137,8 +143,11 @@ export default function Home() {
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{ gap: 32 }}
+      // contentInsetAdjustmentBehavior="always"
+      contentContainerStyle={{ gap: 24, backgroundColor: "#FDFDFD" }}
     >
+      <ElipsesBackground />
+      
       <Navbar />
 
       <View style={{ paddingHorizontal: 22, gap: 32 }}>
@@ -167,6 +176,11 @@ export default function Home() {
               borderRadius: "50%",
               alignItems: "center",
               justifyContent: "center",
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.05,
+              shadowRadius: 32,
             }}
           >
             <Image
@@ -185,6 +199,11 @@ export default function Home() {
               borderRadius: "50%",
               alignItems: "center",
               justifyContent: "center",
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.05,
+              shadowRadius: 32,
             }}
           >
             <Image
@@ -203,6 +222,11 @@ export default function Home() {
               borderRadius: "50%",
               alignItems: "center",
               justifyContent: "center",
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.05,
+              shadowRadius: 32,
             }}
           >
             <Image
@@ -234,6 +258,11 @@ export default function Home() {
               backgroundColor: "#fff",
               borderRadius: 15,
               padding: 16,
+              elevation: 5,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.05,
+              shadowRadius: 32,
             }}
           >
             <View
