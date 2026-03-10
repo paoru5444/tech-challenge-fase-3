@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 400,
     color: "#24252C",
+    fontFamily: "Lexend Deca",
   },
 });

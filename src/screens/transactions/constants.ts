@@ -4,12 +4,12 @@ export const INPUT_FIELDS = [
   {
     key: "amount",
     label: "Valor",
-    placeholder: "$200,00",
+    placeholder: "R$100,00",
   },
   {
     key: "description",
     label: "Descrição",
-    placeholder: "Phone billpayment",
+    placeholder: "Sua descrição aqui",
   },
 ];
 
@@ -23,24 +23,23 @@ export const FORM_INITIAL_VALUES = {
 export const FORM_TYPES = {
   deposit: {
     image: images.deposit,
-    navbarLabel: "Deposit",
+    navbarLabel: "Entrada 🤑",
     actionLabel: "Create Deposit",
     type: "deposit",
   },
   transfer: {
     image: images.transfer,
-    navbarLabel: "Transfer",
+    navbarLabel: "Transferência 🤝",
     actionLabel: "Create Transfer",
     type: "transfer",
   },
   withdraw: {
     image: images.withdraw,
-    navbarLabel: "Withdraw",
+    navbarLabel: "Saída 💸",
     actionLabel: "Create Withdraw",
     type: "withdraw",
   },
 };
-
 export const monthNamesInPortuguese = [
   "Janeiro",
   "Fevereiro",
@@ -54,4 +53,19 @@ export const monthNamesInPortuguese = [
   "Outubro",
   "Novembro",
   "Dezembro",
+];
+
+export const monthNames = [
+  "Jan",
+  "Fev",
+  "Mar",
+  "Abr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Set",
+  "Out",
+  "Nov",
+  "Dez",
 ];

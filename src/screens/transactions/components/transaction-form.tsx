@@ -2,6 +2,7 @@ import Navbar from "@/src/components/shared/navbar";
 import Button from "@/src/components/ui/button";
 import { View } from "react-native";
 
+import ElipsesBackground from "@/src/components/shared/elipses-background";
 import { router } from "expo-router";
 import React from "react";
 import { INPUT_FIELDS } from "../constants";
@@ -20,59 +21,69 @@ export default function TransactionForm({
   openCalendarBottomSheet,
   isEditing,
   setIsEditing,
+  control,
+  errors,
+  setValue,
+  isSubmitting,
+  pageTitle,
 }: TransactionFormProps) {
   return (
     <View
-      style={{ justifyContent: "space-between", flex: 1, paddingBottom: 40 }}
+      style={{
+        justifyContent: "space-between",
+        flex: 1,
+        paddingBottom: 40,
+        paddingHorizontal: 22,
+        backgroundColor: "#FDFDFD",
+        // gap: 32,
+      }}
     >
-      <Navbar title={formType.navbarLabel} />
+      <ElipsesBackground />
+
+      <Navbar />
 
       <TrasactionForm
         fields={INPUT_FIELDS}
         handleInputChange={handleInputChange}
         headerImage={formType.image}
+        pageTitle={pageTitle}
         disableFields={currentForm.mode === FORM_MODE.VIEW && !isEditing}
         formData={formData}
         openCategoryBottomSheet={openCategoryBottomSheet}
         openCalendarBottomSheet={openCalendarBottomSheet}
+        control={control}
+        errors={errors}
+        setValue={setValue}
+        isEditing={isEditing}
       />
 
       {currentForm.mode === FORM_MODE.CREATE && (
-        <View style={{ paddingHorizontal: 16 }}>
-          <Button
-            onPress={() => {
-              onCreate();
-              router.back();
-            }}
-            label={formType.actionLabel}
-          />
-        </View>
+        <Button onPress={onCreate} label={"Salvar"} disabled={isSubmitting} />
       )}
 
       {currentForm.mode === FORM_MODE.UPDATE && (
-        <View style={{ paddingHorizontal: 16 }}>
-          <Button
-            onPress={() => {
-              onUpdate();
-              router.back();
-            }}
-            label={formType.actionLabel}
-          />
-        </View>
+        <Button
+          onPress={() => {
+            onUpdate();
+            router.back();
+          }}
+          label={"Salvar"}
+          disabled={isSubmitting}
+        />
       )}
 
       {currentForm.mode === FORM_MODE.VIEW && (
-        <View style={{ paddingHorizontal: 16, gap: 8 }}>
+        <View style={{ gap: 8 }}>
           <Button
             onPress={() => {
               if (!isEditing) {
                 setIsEditing(true);
               } else {
                 onUpdate();
-                router.back();
               }
             }}
-            label={"Update"}
+            label={isEditing ? "Salvar" : "Atualizar"}
+            disabled={isSubmitting}
           />
 
           <Button
@@ -81,11 +92,11 @@ export default function TransactionForm({
                 setIsEditing(false);
               } else {
                 onDelete();
-                router.back();
               }
             }}
-            label={isEditing ? "Cancelar" : "Delete"}
+            label={isEditing ? "Cancelar" : "Deletar"}
             style={{ backgroundColor: "red" }}
+            disabled={isSubmitting}
           />
         </View>
       )}

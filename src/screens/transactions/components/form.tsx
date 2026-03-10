@@ -17,16 +17,31 @@ interface TransactionFormProps {
 }
 
 export default function Filter({
+  control,
+  errors,
   fields,
   handleInputChange,
   headerImage,
   disableFields,
   formData,
+  pageTitle,
   openCategoryBottomSheet,
   openCalendarBottomSheet,
+  isEditing,
 }: TransactionFormProps) {
   const headerComponent = () => (
-    <Image source={headerImage} style={styles.headerImage} />
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        // justifyContent: "space-between",
+      }}
+    >
+      {/* <Image source={images.transfer} style={styles.headerImage} /> */}
+      <Typography size={24} weight="800">
+        {pageTitle}
+      </Typography>
+    </View>
   );
 
   const renderItem = ({ item }: { item: TransactionFormItem }) => {
@@ -35,11 +50,14 @@ export default function Filter({
     const value = item.key === "category" ? selectedItem.value : selectedItem;
     return (
       <Input
+        control={control}
         label={item.label}
         value={value}
         onChangeText={(value: string) => handleInputChange(item.key, value)}
         placeholder={item.placeholder}
         editable={!disableFields}
+        name={item.key}
+        error={errors[item.key]}
       />
     );
   };
@@ -48,16 +66,22 @@ export default function Filter({
     <View style={{ gap: 16 }}>
       <Select
         label={"Data"}
-        value={formData["date"]}
         placeholder={"20/01/2026"}
         onPress={openCalendarBottomSheet}
+        error={errors.date}
+        name="date"
+        control={control}
+        disableFields={disableFields}
       />
 
       <Select
         label={"Categorias"}
-        value={formData["category"].value}
         placeholder={"Lazer & Entretenimento"}
         onPress={openCategoryBottomSheet}
+        error={errors.category?.key}
+        name="category"
+        control={control}
+        disableFields={disableFields}
       />
 
       <View style={styles.footerUploadCard}>
@@ -79,6 +103,7 @@ export default function Filter({
     <FlatList
       data={fields}
       ListHeaderComponent={headerComponent}
+      ListHeaderComponentStyle={{ marginBottom: 16 }}
       renderItem={renderItem}
       ListFooterComponent={footerComponent}
       contentContainerStyle={styles.listContainer}
@@ -90,11 +115,10 @@ export default function Filter({
 const styles = StyleSheet.create({
   listContainer: {
     gap: 16,
-    paddingHorizontal: 24,
   },
   headerImage: {
-    width: 115,
-    height: 115,
+    width: 40,
+    height: 40,
     alignSelf: "center",
     resizeMode: "contain",
   },
