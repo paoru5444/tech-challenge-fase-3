@@ -6,7 +6,7 @@ import { AuthProvider } from "../context/auth.context";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    "SF-Pro-Display": require("@/assets/fonts/sf-pro/SF-Pro.ttf"),
+    "Lexend Deca": require("@/assets/fonts/lexend-deca/LexendDeca-Regular.ttf"),
   });
 
   if (!fontsLoaded) return null;
