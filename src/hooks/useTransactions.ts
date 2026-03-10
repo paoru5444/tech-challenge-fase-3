@@ -46,8 +46,6 @@ const useTransactions = () => {
         // date: Timestamp.fromDate(new Date(data.date)),
       });
 
-      await getTransactions();
-
       console.log("Transferência adicionada com sucesso: ", response);
     } catch (error) {
       console.log(
@@ -62,7 +60,6 @@ const useTransactions = () => {
     await deleteDoc(
       doc(db, "users", user?.uid ?? "", "transactions", transactionId),
     );
-    await getTransactions();
   };
 
   const updateTransaction = async (
@@ -73,7 +70,6 @@ const useTransactions = () => {
       doc(db, "users", user?.uid ?? "", "transactions", transactionId),
       transaction,
     );
-    await getTransactions();
   };
 
   const getTransactionsYearsAndMonths = async () => {
@@ -104,9 +100,9 @@ const useTransactions = () => {
     month,
     category,
   }: {
-    year: string;
-    month: string;
-    category: string;
+    year?: string;
+    month?: string;
+    category?: string;
   }) => {
     const queries = [];
 

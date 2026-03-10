@@ -41,6 +41,8 @@ export default function TransactionsListScreen() {
       pathname: "/transactions/form",
       params: {
         ...item,
+        categoryKey: item.category.key,
+        categoryValue: item.category.value,
         mode: FORM_MODE.VIEW,
       },
     });

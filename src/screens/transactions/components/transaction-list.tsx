@@ -1,14 +1,14 @@
 import React from "react";
 
+import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Navbar from "@/src/components/shared/navbar";
 import Badge from "@/src/components/ui/bedge";
 import Input from "@/src/components/ui/input";
 import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
-import { Transaction } from "@/src/hooks/useTransactions";
 import { router } from "expo-router";
 import { FlatList, Image, TouchableOpacity, View } from "react-native";
-import { TransactionsListProps, TransactionType } from "../models";
+import { Transaction, TransactionsListProps, TransactionType } from "../models";
 
 export default function TransactionsList({
   search,
@@ -64,10 +64,14 @@ export default function TransactionsList({
   );
 
   return (
-    <>
+    <View
+      style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22, flex: 1 }}
+    >
       <Navbar title={"Transactions"} />
 
-      <View style={{ paddingHorizontal: 16, gap: 16 }}>
+      <ElipsesBackground />
+
+      <View style={{ gap: 16 }}>
         <View
           style={{
             flexDirection: "row",
@@ -137,9 +141,10 @@ export default function TransactionsList({
           data={transactions}
           renderItem={renderItem}
           contentContainerStyle={{ gap: 16 }}
-          keyExtractor={(item) => item.description}
+          keyExtractor={(item) => item?.id}
+          showsVerticalScrollIndicator={false}
         />
       </View>
-    </>
+    </View>
   );
 }

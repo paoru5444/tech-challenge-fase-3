@@ -70,7 +70,6 @@ export default function TransactionFormScreen() {
   };
 
   useEffect(() => {
-    console.log("currentForm: ", currentForm);
     const category = !selectedCategory.key
       ? {
           key: currentForm?.categoryKey || "",
@@ -78,9 +77,6 @@ export default function TransactionFormScreen() {
         }
       : selectedCategory;
 
-    console.log("category: ", category);
-
-    console.log("selectedCategory: ", selectedCategory);
     setValue("category", category);
     setValue("date", selectedDate || currentForm?.date);
   }, [selectedCategory, selectedDate]);

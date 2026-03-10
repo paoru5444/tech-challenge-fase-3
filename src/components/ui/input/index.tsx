@@ -5,9 +5,9 @@ import Typography from "../typography";
 
 interface InputProps extends TextInputProps {
   label?: string;
-  control: Control<any>;
+  control?: Control<any>;
   error?: { message?: string };
-  name: string;
+  name?: string;
 }
 
 export default function Input({
