@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 12,
-    paddingHorizontal: 22,
     height: 70,
   },
   navbar__image: {

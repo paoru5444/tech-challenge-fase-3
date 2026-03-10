@@ -3,31 +3,21 @@ import Avatar from "@/assets/images/avatar.png";
 import { router } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import Typography from "../../ui/typography";
 import { styles } from "./styles";
 
 interface TitleProps {
-  title?: string;
+  showHeader?: boolean;
 }
 
-export default function Navbar({ title }: TitleProps) {
+export default function Navbar({ showHeader }: TitleProps) {
   const handleGoBack = () => {
+    console.log("voltando");
     router.back();
   };
 
   return (
     <View style={styles.navbar}>
-      {title ? (
-        <TouchableOpacity
-          onPress={handleGoBack}
-          style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
-        >
-          <Image source={ChevronLeft} style={{ width: 6, height: 12 }} />
-          <Typography style={{ fontWeight: 600, fontSize: 16 }}>
-            {title}
-          </Typography>
-        </TouchableOpacity>
-      ) : (
+      {showHeader ? (
         <>
           <Image source={Avatar} style={styles.navbar__image} />
 
@@ -36,6 +26,19 @@ export default function Navbar({ title }: TitleProps) {
             <Text style={styles.navbar_username}>Livia Vaccaro</Text>
           </View>
         </>
+      ) : (
+        <TouchableOpacity
+          onPress={handleGoBack}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 16,
+            zIndex: 99999,
+          }}
+          hitSlop={25}
+        >
+          <Image source={ChevronLeft} style={{ width: 6, height: 12 }} />
+        </TouchableOpacity>
       )}
     </View>
   );
