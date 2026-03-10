@@ -1,131 +1,26 @@
-import inter from "@/assets/fonts/inter/Inter-VariableFont_opsz,wght.ttf";
-import Deposit from "@/assets/icons/deposit.png";
 import ElipsesBackground from "@/src/components/shared/elipses-background";
-import Badge from "@/src/components/ui/bedge";
 import Typography from "@/src/components/ui/typography";
-import { icons } from "@/src/constants/icons";
+import useAnalytics from "@/src/hooks/useAnalytics";
 import useTransactions from "@/src/hooks/useTransactions";
-import { goTo } from "@/src/utils/functions";
-import { useFont } from "@shopify/react-native-skia";
 import { router } from "expo-router";
 import React, { useEffect, useMemo } from "react";
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { BarChart } from "react-native-gifted-charts";
-import { useDerivedValue } from "react-native-reanimated";
-import { useChartPressState } from "victory-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import Navbar from "../../components/shared/navbar";
 import { FORM_TYPES } from "../transactions/constants";
 import { FORM_MODE } from "../transactions/models";
+import Analytics from "./components/analytics";
+import Balance from "./components/balance";
+import LastTransactions from "./components/last-transactions";
 
-// Gráfico exibindo o total em dinheiro de transaçãoes para cada tipo mensalmente
-// O mês atual é iniciado como default
-// Eu preciso listar os meses para troca
-// Buscar transações
-// Calcular o total de ocorrências do tipo selecionado no mês
-// Index do mês para cada month e o total acumulado
-
-// const data = Array.from({ length: 6 }, (_, index) => ({
-//   // Starting at 1 for January
-//   month: index + 1,
-//   // Randomizing the listen count between 100 and 50
-//   listenCount: Math.floor(Math.random() * (100 - 50 + 1)) + 50,
-// }));
+// Para amanhã: Atualizar e deletar transação & Anexar arquivo
 
 export default function Home() {
   const { transactions, getTransactions } = useTransactions();
+  const { chartData } = useAnalytics({ transactions });
 
   useEffect(() => {
     getTransactions();
   }, []);
-
-  const data = useMemo(() => {
-    const months = Array.from(
-      new Set(
-        transactions.map((transaction) => {
-          return transaction.date.split("-")[1];
-        }),
-      ),
-    );
-
-    const item = months.map((month) => {
-      const count = transactions.reduce((acc, item) => {
-        const itemMonth = item.date.split("-")[1];
-        const itemAmount = parseFloat(item.amount);
-        if (itemMonth === month) {
-          return acc + itemAmount;
-        }
-
-        return acc;
-      }, 0);
-
-      console.log("month:", month);
-
-      return {
-        label: parseInt(month),
-        value: count,
-        // topLabelComponent: () => <Text>{count}</Text>,
-      };
-    });
-
-    return item;
-  }, [transactions]);
-
-  const font = useFont(inter, 16);
-
-  const { state, isActive } = useChartPressState({
-    x: 0,
-    y: { listenCount: 0 },
-  });
-
-  console.log("state: ", state);
-
-  const selectedIndex = useDerivedValue(() =>
-    isActive ? Math.round(state.x.value.value) : -1,
-  );
-
-  const renderItem = ({ item }) => (
-    <View
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        backgroundColor: "#fff",
-        minHeight: 66,
-        paddingHorizontal: 16,
-        borderRadius: 15,
-        elevation: 5,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.05,
-        shadowRadius: 32,
-      }}
-    >
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Image source={Deposit} style={{ width: 34, height: 34 }} />
-
-        <View>
-          <Typography style={{ fontWeight: 600 }}>
-            {item.description.substr(0, 15)}...
-          </Typography>
-          <Typography>{item.date}</Typography>
-        </View>
-      </View>
-
-      <View>
-        <Typography style={{ textAlign: "right" }}>R${item.amount}</Typography>
-        <Typography style={{ textAlign: "right" }}>
-          {item.category.value}
-        </Typography>
-      </View>
-    </View>
-  );
 
   const handleGoTo = (type: keyof typeof FORM_TYPES) => {
     router.push({
@@ -134,198 +29,47 @@ export default function Home() {
     });
   };
 
-  console.log("data ", data);
+  const derivedTotal = useMemo(() => {
+    return transactions.reduce((acc, item) => {
+      if (!item.amount) {
+        return acc;
+      }
+      return acc + parseFloat(item.amount);
+    }, 0);
+  }, [transactions]);
 
-  const derivedTotal = transactions.reduce((acc, item) => {
-    return acc + parseFloat(item.amount);
-  }, 0);
+  const lastTransactions = useMemo(() => {
+    return transactions.slice(0, 3);
+  }, [transactions]);
+
+  const currentMonth = new Date().getMonth() - 1;
 
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      // contentInsetAdjustmentBehavior="always"
-      contentContainerStyle={{ gap: 24, backgroundColor: "#FDFDFD" }}
+      contentContainerStyle={{
+        gap: 24,
+        paddingHorizontal: 22,
+        backgroundColor: "#FDFDFD",
+      }}
     >
       <ElipsesBackground />
-      
-      <Navbar />
 
-      <View style={{ paddingHorizontal: 22, gap: 32 }}>
-        <View style={{ alignItems: "center", gap: 2 }}>
-          <Typography weight="600" color="#AEAEB2">
-            Saldo Total
-          </Typography>
-          <Typography weight="600" size={40}>
-            R${derivedTotal}
-          </Typography>
-        </View>
+      <Navbar showHeader />
 
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 16,
-            justifyContent: "center",
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => handleGoTo("deposit")}
-            style={{
-              width: 90,
-              height: 90,
-              backgroundColor: "#fff",
-              borderRadius: "50%",
-              alignItems: "center",
-              justifyContent: "center",
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 32,
-            }}
-          >
-            <Image
-              source={icons.depositOutline}
-              style={{ width: 24, height: 24 }}
-            />
-            <Typography>Entradas</Typography>
-          </TouchableOpacity>
+      <Balance totalBalance={derivedTotal} handleGoTo={handleGoTo} />
 
-          <TouchableOpacity
-            onPress={() => handleGoTo("withdraw")}
-            style={{
-              width: 90,
-              height: 90,
-              backgroundColor: "#fff",
-              borderRadius: "50%",
-              alignItems: "center",
-              justifyContent: "center",
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 32,
-            }}
-          >
-            <Image
-              source={icons.withdrawOutline}
-              style={{ width: 24, height: 24 }}
-            />
-            <Typography>Saídas</Typography>
-          </TouchableOpacity>
+      <View style={{ width: "100%", gap: 16 }}>
+        <Typography weight="600">Analises</Typography>
+        <Analytics chartData={chartData} currentMonth={currentMonth} />
+      </View>
 
-          <TouchableOpacity
-            onPress={() => handleGoTo("transfer")}
-            style={{
-              width: 90,
-              height: 90,
-              backgroundColor: "#fff",
-              borderRadius: "50%",
-              alignItems: "center",
-              justifyContent: "center",
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 32,
-            }}
-          >
-            <Image
-              source={icons.transferOutline}
-              style={{ width: 24, height: 24 }}
-            />
-            <Typography>Trocas</Typography>
-          </TouchableOpacity>
-        </View>
+      <View style={{ gap: 16 }}>
+        <TouchableOpacity onPress={() => router.push("/transactions/list")}>
+          <Typography weight="600">Ulitmas Transações</Typography>
+        </TouchableOpacity>
 
-        <View style={{ width: "100%", gap: 16 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography weight="600">Analises</Typography>
-
-            <Image
-              source={icons.chevronRight}
-              style={{ width: 6, height: 12 }}
-            />
-          </View>
-
-          <View
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: 15,
-              padding: 16,
-              elevation: 5,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.05,
-              shadowRadius: 32,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Badge label="Categoria" icon={icons.chevronDown} />
-              <Badge label="Mês" />
-            </View>
-
-            <BarChart
-              data={data}
-              frontColor={"#EDF0F7"}
-              barBorderRadius={10}
-              yAxisThickness={0}
-              xAxisThickness={0}
-              yAxisLabelWidth={0}
-              yAxisExtraHeight={0}
-              leftShiftForTooltip={0}
-              isAnimated
-              hideAxesAndRules
-              renderTooltip={(item) => <Text>R${item.value}</Text>}
-              focusBarOnPress
-              focusedBarConfig={{ color: "#FFE1E1" }}
-              barWidth={35}
-              autoCenterTooltip
-              disableScroll
-              maxValue={Math.max(...data.map((item) => item.value)) * 1.3}
-              adjustToWidth
-            />
-          </View>
-        </View>
-
-        <View style={{ width: "100%", height: 200, gap: 16 }}>
-          <TouchableOpacity
-            onPress={() => goTo("transactions/list")}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography weight="600">Transações</Typography>
-
-            <Image
-              source={icons.chevronRight}
-              style={{ width: 6, height: 12 }}
-            />
-          </TouchableOpacity>
-
-          <FlatList
-            data={transactions}
-            renderItem={renderItem}
-            contentContainerStyle={{ gap: 16 }}
-          />
-
-          {/* <TouchableOpacity onPress={() => auth.logout()}>
-            <Text>Logout</Text>
-          </TouchableOpacity> */}
-        </View>
+        <LastTransactions lastTransactions={lastTransactions} />
       </View>
     </ScrollView>
   );
