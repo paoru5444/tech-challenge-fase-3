@@ -1,11 +1,16 @@
+import useAnalytics from "@/src/hooks/useAnalytics";
 import React, { createContext, useContext, useState } from "react";
-import { CategoryType } from "../models";
+import { CategoryType, TransactionType } from "../models";
 
 interface TransactionsContextType {
   selectedCategory: { key: string; value: string };
   selectedDate: string;
   handleSelectedCategory: (category: CategoryType) => void;
   handleSelectedDate: (date: string) => void;
+  selectedType: TransactionType;
+  handleSelectedType: (type: TransactionType) => void;
+  chartData: any;
+  fetchChartData: (type: TransactionType) => void;
 }
 
 const TransactionsContext = createContext<TransactionsContextType | null>(null);
@@ -33,6 +38,12 @@ export function TransactionsProvider({
   });
 
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedType, setSelectedType] = useState(TransactionType.ALL);
+  const { chartData, getCharData } = useAnalytics();
+
+  function fetchChartData(type: TransactionType) {
+    getCharData(type);
+  }
 
   function handleSelectedCategory(category: CategoryType) {
     setSelectedCategory(category);
@@ -42,6 +53,11 @@ export function TransactionsProvider({
     setSelectedDate(date);
   }
 
+  function handleSelectedType(type: TransactionType) {
+    fetchChartData(type);
+    setSelectedType(type);
+  }
+
   return (
     <TransactionsContext.Provider
       value={{
@@ -49,6 +65,10 @@ export function TransactionsProvider({
         handleSelectedCategory,
         selectedDate,
         handleSelectedDate,
+        selectedType,
+        handleSelectedType,
+        chartData,
+        fetchChartData,
       }}
     >
       {children}

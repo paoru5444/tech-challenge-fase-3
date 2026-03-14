@@ -69,3 +69,10 @@ export const monthNames = [
   "Nov",
   "Dez",
 ];
+
+export const barChartTypes = {
+  all: "Todos",
+  deposit: "Entradas",
+  withdraw: "Saídas",
+  transfer: "Transferências",
+};
