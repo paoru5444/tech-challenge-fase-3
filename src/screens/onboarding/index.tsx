@@ -1,7 +1,9 @@
+import ElipsesBackground from "@/src/components/shared/elipses-background";
+import Typography from "@/src/components/ui/typography";
 import { images } from "@/src/constants";
 import { router } from "expo-router";
 import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 
 const handleGettingStarted = () => {
   router.push("/sign-in");
@@ -18,14 +20,19 @@ export default function Onboarding() {
         paddingHorizontal: 16,
       }}
     >
+      <ElipsesBackground />
+
       <Image source={images.onboarding} style={{ width: 232, height: 232 }} />
 
       <View style={{ gap: 48 }}>
         <View style={{ gap: 16 }}>
-          <Text style={{ textAlign: "center", fontSize: 24, fontWeight: 600 }}>
+          <Typography
+            size={24}
+            style={{ textAlign: "center", fontWeight: 600 }}
+          >
             Gerencie & Analise{"\n"}Finanças Pessoais
-          </Text>
-          <Text
+          </Typography>
+          <Typography
             style={{
               textAlign: "center",
               paddingHorizontal: 24,
@@ -36,7 +43,7 @@ export default function Onboarding() {
             Esta ferramenta produtiva foi desenvolvida para te ajudar a
             gerenciar melhor suas finanças pessoais de forma prática e
             conveniente!
-          </Text>
+          </Typography>
         </View>
 
         <TouchableOpacity
@@ -49,9 +56,9 @@ export default function Onboarding() {
             justifyContent: "center",
           }}
         >
-          <Text style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>
+          <Typography style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>
             Vamos Começar
-          </Text>
+          </Typography>
         </TouchableOpacity>
       </View>
     </View>
