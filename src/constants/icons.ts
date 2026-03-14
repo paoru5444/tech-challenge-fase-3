@@ -3,6 +3,8 @@ import chevronDown from "@/assets/icons/chevron-down.png";
 import chevronRight from "@/assets/icons/chevron-right.png";
 import depositOutline from "@/assets/icons/deposit-outline.png";
 import deposit from "@/assets/icons/deposit.png";
+import fileDownload from "@/assets/icons/file-download.png";
+import fileUpload from "@/assets/icons/file-upload.png";
 import filter from "@/assets/icons/filter.png";
 import transferOutline from "@/assets/icons/transfer-outline.png";
 import transfer from "@/assets/icons/transfer.png";
@@ -22,4 +24,6 @@ export const icons = {
   transfer,
   calendarCache,
   chevronDown,
+  fileUpload,
+  fileDownload,
 };

@@ -35,6 +35,15 @@ export default function AppLayout() {
             sheetCornerRadius: 24,
           }}
         />
+        <Stack.Screen
+          name="types-bottom-sheet"
+          options={{
+            presentation: "formSheet",
+            sheetAllowedDetents: "fitToContents",
+            sheetGrabberVisible: false,
+            sheetCornerRadius: 24,
+          }}
+        />
       </Stack>
     </TransactionsProvider>
   );

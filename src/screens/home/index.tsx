@@ -1,24 +1,23 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Typography from "@/src/components/ui/typography";
-import useAnalytics from "@/src/hooks/useAnalytics";
 import useTransactions from "@/src/hooks/useTransactions";
 import { router } from "expo-router";
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import Navbar from "../../components/shared/navbar";
 import { FORM_TYPES } from "../transactions/constants";
+import { useTransactionsContext } from "../transactions/context/transactionsContext";
 import { FORM_MODE } from "../transactions/models";
 import Analytics from "./components/analytics";
 import Balance from "./components/balance";
 import LastTransactions from "./components/last-transactions";
 
-// Para amanhã: Atualizar e deletar transação & Anexar arquivo
-
 export default function Home() {
   const { transactions, getTransactions } = useTransactions();
-  const { chartData } = useAnalytics({ transactions });
+  const { selectedType, chartData, fetchChartData } = useTransactionsContext();
 
   useEffect(() => {
+    fetchChartData(selectedType);
     getTransactions();
   }, []);
 
@@ -27,6 +26,10 @@ export default function Home() {
       pathname: "/transactions/form",
       params: { ...FORM_TYPES[type], mode: FORM_MODE.CREATE },
     });
+  };
+
+  const openTypesBottomSheet = () => {
+    router.push("/types-bottom-sheet");
   };
 
   const derivedTotal = useMemo(() => {
@@ -41,8 +44,6 @@ export default function Home() {
   const lastTransactions = useMemo(() => {
     return transactions.slice(0, 3);
   }, [transactions]);
-
-  const currentMonth = new Date().getMonth() - 1;
 
   return (
     <ScrollView
@@ -61,7 +62,11 @@ export default function Home() {
 
       <View style={{ width: "100%", gap: 16 }}>
         <Typography weight="600">Analises</Typography>
-        <Analytics chartData={chartData} currentMonth={currentMonth} />
+        <Analytics
+          chartData={chartData}
+          openTypesBottomSheet={openTypesBottomSheet}
+          selectedType={selectedType}
+        />
       </View>
 
       <View style={{ gap: 16 }}>
@@ -69,7 +74,10 @@ export default function Home() {
           <Typography weight="600">Ulitmas Transações</Typography>
         </TouchableOpacity>
 
-        <LastTransactions lastTransactions={lastTransactions} />
+        <LastTransactions
+          lastTransactions={lastTransactions}
+          selectedType={selectedType}
+        />
       </View>
     </ScrollView>
   );

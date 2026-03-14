@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useCallback, useState } from "react";
 import { monthNames } from "../screens/transactions/constants";
-import { Transaction } from "../screens/transactions/models";
+import { Transaction, TransactionType } from "../screens/transactions/models";
+import useTransactions from "./useTransactions";
 
 const getMonths = (transactions: Transaction[]) => {
   const months = transactions.map((transaction) => {
@@ -12,36 +13,47 @@ const getMonths = (transactions: Transaction[]) => {
   return Array.from(monthsSet);
 };
 
-export default function useAnalytics({
-  transactions,
-}: {
-  transactions: Transaction[];
-}) {
-  const chartData = useMemo(() => {
-    const months = getMonths(transactions);
+export default function useAnalytics() {
+  const { getTransactions } = useTransactions();
 
-    const item = months.sort().map((month) => {
-      const count = transactions.reduce((acc, item) => {
-        const itemMonth = item.date.split("-")[1];
-        const itemAmount = parseFloat(item.amount);
+  const [chartData, setChartData] = useState([]);
 
-        if (itemMonth === month && !!itemAmount) {
-          return acc + itemAmount;
-        }
+  const getCharData = useCallback(
+    async (type: TransactionType) => {
+      const transactions = await getTransactions();
 
-        return acc;
-      }, 0);
+      const months = getMonths(transactions);
 
-      return {
-        label: monthNames[parseInt(month) - 1],
-        value: count,
-      };
-    });
+      const item = months.sort().map((month) => {
+        const count = transactions.reduce((acc, item) => {
+          const itemMonth = item.date.split("-")[1];
+          const itemAmount = parseFloat(item.amount);
+          const hasMatchCategory = item.type === type;
 
-    return item;
-  }, [transactions]);
+          if (
+            itemMonth === month &&
+            !!itemAmount &&
+            (hasMatchCategory || type === "all")
+          ) {
+            return acc + itemAmount;
+          }
+
+          return acc;
+        }, 0);
+
+        return {
+          label: monthNames[parseInt(month) - 1],
+          value: count,
+        };
+      });
+
+      setChartData([...item]);
+    },
+    [getTransactions],
+  );
 
   return {
     chartData,
+    getCharData,
   };
 }
