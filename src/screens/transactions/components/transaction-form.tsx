@@ -26,6 +26,9 @@ export default function TransactionForm({
   setValue,
   isSubmitting,
   pageTitle,
+  handleGetFile,
+  file,
+  isReadOnly,
 }: TransactionFormProps) {
   return (
     <View
@@ -55,6 +58,10 @@ export default function TransactionForm({
         errors={errors}
         setValue={setValue}
         isEditing={isEditing}
+        handleGetFile={handleGetFile}
+        file={file}
+        isReadOnly={isReadOnly}
+        currentForm={currentForm}
       />
 
       {currentForm.mode === FORM_MODE.CREATE && (

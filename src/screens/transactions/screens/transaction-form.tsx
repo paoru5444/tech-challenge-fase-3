@@ -1,4 +1,5 @@
 import useTransactions from "@/src/hooks/useTransactions";
+import { useUpload } from "@/src/hooks/useUploadFile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -27,15 +28,14 @@ export type FormData = z.infer<typeof formInSchema>;
 
 export default function TransactionFormScreen() {
   const { selectedCategory, selectedDate } = useTransactionsContext();
-  const {
-    addTransactions,
-    deleteTransaction,
-    updateTransaction,
-    filterTransactions,
-  } = useTransactions();
+  const { addTransactions, deleteTransaction, updateTransaction } =
+    useTransactions();
   const currentForm = useLocalSearchParams<CurrentForm>();
+  const isReadOnly = currentForm?.mode === "view";
+
   const formType = FORM_TYPES[currentForm.type];
   const [isEditing, setIsEditing] = useState(false);
+  const { getFile, file, blob } = useUpload();
 
   const [formData, setFormData] = useState<FormDataProps>({
     amount: currentForm?.amount || "",
@@ -84,10 +84,14 @@ export default function TransactionFormScreen() {
   const onCreate = (data) => {
     Keyboard.dismiss();
 
-    addTransactions({
-      ...data,
-      type: currentForm.type,
-    });
+    addTransactions(
+      {
+        ...data,
+        type: currentForm.type,
+      },
+      file,
+      blob,
+    );
 
     router.replace("/transactions/list");
   };
@@ -99,7 +103,6 @@ export default function TransactionFormScreen() {
 
   const onUpdate = (data) => {
     Keyboard.dismiss();
-    console.log("data: ", data);
     updateTransaction(currentForm.id, data);
     router.replace("/transactions/list");
   };
@@ -110,6 +113,10 @@ export default function TransactionFormScreen() {
 
   const openCalendarBottomSheet = () => {
     router.push("/calendar-bottom-sheet");
+  };
+
+  const handleGetFile = () => {
+    getFile();
   };
 
   const pageTitle = {
@@ -135,6 +142,9 @@ export default function TransactionFormScreen() {
       setValue={setValue}
       isSubmitting={isSubmitting}
       pageTitle={pageTitle[isEditing ? "update" : "create"]}
+      handleGetFile={handleGetFile}
+      file={file}
+      isReadOnly={isReadOnly}
     />
   );
 }

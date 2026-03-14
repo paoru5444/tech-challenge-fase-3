@@ -3,7 +3,13 @@ import Select from "@/src/components/ui/select";
 import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
 import React from "react";
-import { FlatList, Image, StyleSheet, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { CategoryType, FormDataProps, TransactionFormItem } from "../models";
 
 interface TransactionFormProps {
@@ -21,13 +27,15 @@ export default function Filter({
   errors,
   fields,
   handleInputChange,
-  headerImage,
   disableFields,
   formData,
   pageTitle,
   openCategoryBottomSheet,
   openCalendarBottomSheet,
-  isEditing,
+  handleGetFile,
+  file,
+  isReadOnly,
+  currentForm,
 }: TransactionFormProps) {
   const headerComponent = () => (
     <View
@@ -84,15 +92,46 @@ export default function Filter({
         disableFields={disableFields}
       />
 
-      <View style={styles.footerUploadCard}>
-        <Image source={icons.upload} style={styles.footerIcon} />
-        <Typography weight="500" size={12}>
-          Enviar arquivo
-        </Typography>
-        <Typography weight="500" size={12} color="#E5E5EA">
-          Imagens, PDF ou documentos
-        </Typography>
-      </View>
+      <TouchableOpacity
+        onPress={handleGetFile}
+        style={[
+          styles.footerUploadCard,
+          {
+            borderColor: file?.name ? "#09CF35" : "#E5E5EA",
+            backgroundColor: file?.name ? "#E5FAEA" : "#fff",
+          },
+        ]}
+      >
+        {isReadOnly ? (
+          <>
+            <Image source={icons.fileDownload} style={styles.footerIcon} />
+
+            <View>
+              <Typography weight="500" size={12}>
+                {"Fazer download arquivo"}
+              </Typography>
+
+              <Typography weight="500" size={12}>
+                {currentForm?.fileName}
+              </Typography>
+            </View>
+          </>
+        ) : (
+          <>
+            <Image source={icons.fileUpload} style={styles.footerIcon} />
+
+            <Typography weight="500" size={12}>
+              {file?.name ?? "Enviar arquivo"}
+            </Typography>
+
+            {!file?.name && (
+              <Typography weight="500" size={12} color="#E5E5EA">
+                Imagens, PDF ou documentos
+              </Typography>
+            )}
+          </>
+        )}
+      </TouchableOpacity>
     </View>
   );
 
@@ -125,15 +164,22 @@ const styles = StyleSheet.create({
   footerUploadCard: {
     borderWidth: 1,
     borderStyle: "dashed",
-    borderColor: "#E5E5EA",
-    height: 90,
+    height: 70,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     backgroundColor: "#ffffff",
     borderRadius: 15,
+    flexDirection: "row",
+    padding: 16,
+    gap: 10,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 32,
   },
   footerIcon: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
   },
 });

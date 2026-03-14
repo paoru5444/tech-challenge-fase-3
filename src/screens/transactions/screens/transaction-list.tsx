@@ -9,6 +9,7 @@ export default function TransactionsListScreen() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState(TransactionType.ALL);
   const { category, month, year } = useLocalSearchParams();
+  const [badgeActive, setBadgeActive] = useState("All");
 
   useEffect(() => {
     filterTransactions({ category, month, year });
@@ -19,6 +20,7 @@ export default function TransactionsListScreen() {
   };
 
   const handleActiveTransactionFilter = (value: TransactionType) => {
+    setBadgeActive(value);
     setType(value);
   };
 
@@ -55,6 +57,8 @@ export default function TransactionsListScreen() {
       transactions={filteredTransactions}
       handleActiveTransactionFilter={handleActiveTransactionFilter}
       onPressTransaction={onPressTransaction}
+      type={type}
+      setBadgeActive={setBadgeActive}
     />
   );
 }

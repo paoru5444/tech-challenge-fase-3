@@ -1,10 +1,10 @@
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -12,12 +12,14 @@ import { useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { db } from "../firebase/config";
 import { FormDataProps, Transaction } from "../screens/transactions/models";
+import { useUpload } from "./useUploadFile";
 
 const useTransactions = () => {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionMonths, setTransactionMonths] = useState([]);
   const [transactionYears, setTransactionYears] = useState([]);
+  const { uploadFile } = useUpload();
 
   const transactionRef = user
     ? collection(db, "users", user?.uid ?? "", "transactions")
@@ -37,12 +39,25 @@ const useTransactions = () => {
     }
   };
 
-  const addTransactions = async (data: any) => {
+  const addTransactions = async (data: any, file: any, blob: any) => {
     if (!transactionRef) return;
 
+    const transactionDoc = doc(transactionRef);
+
     try {
-      const response = await addDoc(transactionRef, {
-        ...data,
+      const transactionId = transactionDoc?.id;
+
+      const payload = { ...data };
+
+      if (file && blob) {
+        const { url } = await uploadFile({ transactionId, file, blob });
+
+        payload.fileUrl = url;
+        payload.fileName = file?.name;
+      }
+
+      const response = await setDoc(transactionDoc, {
+        ...payload,
         // date: Timestamp.fromDate(new Date(data.date)),
       });
 
