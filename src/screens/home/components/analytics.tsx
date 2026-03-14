@@ -3,13 +3,24 @@ import { icons } from "@/src/constants/icons";
 import React from "react";
 import { Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
+import { barChartTypes } from "../../transactions/constants";
+import { TransactionType } from "../../transactions/models";
 
-interface AnalyticsProps {
+export interface AnalyticsProps {
   chartData: any[];
-  currentMonth: number;
+  openTypesBottomSheet: () => void;
+  selectedType: TransactionType;
 }
 
-export default function Analytics({ chartData, currentMonth }: AnalyticsProps) {
+export type TooltipProps = {
+  value: number;
+};
+
+export default function Analytics({
+  chartData,
+  openTypesBottomSheet,
+  selectedType,
+}: AnalyticsProps) {
   return (
     <View
       style={{
@@ -27,11 +38,15 @@ export default function Analytics({ chartData, currentMonth }: AnalyticsProps) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
         }}
       >
-        <Badge label="Categoria" icon={icons.chevronDown} />
-        <Badge label="Mês" />
+        <Badge
+          label={`Tipo: ${barChartTypes[selectedType]}`}
+          labelSize={12}
+          icon={icons.chevronDown}
+          onPress={openTypesBottomSheet}
+        />
       </View>
 
       <BarChart
@@ -43,17 +58,17 @@ export default function Analytics({ chartData, currentMonth }: AnalyticsProps) {
         yAxisLabelWidth={0}
         yAxisExtraHeight={0}
         leftShiftForTooltip={0}
-        isAnimated
         hideAxesAndRules
-        renderTooltip={(item) => <Text>R${item.value}</Text>}
+        renderTooltip={(item: TooltipProps) => <Text>R${item.value}</Text>}
         focusBarOnPress
         focusedBarConfig={{ color: "#FFE1E1" }}
-        barWidth={35}
+        barWidth={40}
         autoCenterTooltip
         disableScroll
         maxValue={Math.max(...chartData.map((item) => item.value)) * 1.3}
         adjustToWidth
-        initialSelectedIndex={2}
+        key={selectedType}
+        minHeight={5}
       />
     </View>
   );
