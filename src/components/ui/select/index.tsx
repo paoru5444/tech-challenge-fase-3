@@ -28,7 +28,6 @@ export default function Select({
   disableFields,
   ...rest
 }: SelectProps) {
-  console.log("error: ", error);
   return (
     <TouchableOpacity
       onPress={onPress}

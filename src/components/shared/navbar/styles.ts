@@ -10,8 +10,9 @@ export const styles = StyleSheet.create({
     height: 70,
   },
   navbar__image: {
-    width: 46,
-    height: 46,
+    width: 123,
+    height: 40,
+    resizeMode: "contain",
   },
   navbar_greetings: {
     color: colors.light_gray,

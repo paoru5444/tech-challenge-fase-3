@@ -8,12 +8,19 @@ import {
 import Typography from "../typography";
 
 interface BadgeProps extends TouchableOpacityProps {
-  isActive: boolean;
+  isActive?: boolean;
   label: string;
   icon: any;
+  labelSize: number;
 }
 
-export default function Badge({ isActive, label, icon, ...rest }: BadgeProps) {
+export default function Badge({
+  isActive = false,
+  label,
+  icon,
+  labelSize,
+  ...rest
+}: BadgeProps) {
   const selectedStyle = isActive ? styles.active : styles.inative;
   const selectedLabelStyle = isActive
     ? styles.labelActive
@@ -21,7 +28,13 @@ export default function Badge({ isActive, label, icon, ...rest }: BadgeProps) {
 
   return (
     <TouchableOpacity style={[styles.base, selectedStyle]} {...rest}>
-      <Typography style={selectedLabelStyle}>{label}</Typography>
+      <Typography
+        size={labelSize}
+        color={isActive ? "#fff" : "#000"}
+        style={selectedLabelStyle}
+      >
+        {label}
+      </Typography>
 
       {icon && <Image source={icon} style={{ width: 11, height: 11 }} />}
     </TouchableOpacity>
