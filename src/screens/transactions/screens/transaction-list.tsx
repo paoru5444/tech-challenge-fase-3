@@ -1,19 +1,22 @@
 import useTransactions, { Transaction } from "@/src/hooks/useTransactions";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import TransactionsListComponent from "../components/transaction-list";
+import { TRANSACTIONS_PER_PAGE } from "../constants";
 import { FORM_MODE, TransactionType } from "../models";
 
 export default function TransactionsListScreen() {
-  const { filterTransactions, transactions } = useTransactions();
+  const { filterTransactions, transactions, perScroll, setPerScroll, loading } =
+    useTransactions();
   const [search, setSearch] = useState("");
   const [type, setType] = useState(TransactionType.ALL);
   const { category, month, year } = useLocalSearchParams();
   const [badgeActive, setBadgeActive] = useState("All");
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     filterTransactions({ category, month, year });
-  }, [category, month, year]);
+  }, [category, month, year, perScroll]);
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -50,6 +53,22 @@ export default function TransactionsListScreen() {
     });
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+
+    try {
+      filterTransactions({ category, month, year });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [category, month, year]);
+
+  const onEndReached = () => {
+    if (perScroll > transactions.length && transactions.length !== 0) return;
+
+    setPerScroll((prev: number) => prev + TRANSACTIONS_PER_PAGE);
+  };
+
   return (
     <TransactionsListComponent
       search={search}
@@ -59,6 +78,10 @@ export default function TransactionsListScreen() {
       onPressTransaction={onPressTransaction}
       type={type}
       setBadgeActive={setBadgeActive}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
+      onEndReached={onEndReached}
+      loading={loading}
     />
   );
 }

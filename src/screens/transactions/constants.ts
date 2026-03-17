@@ -76,3 +76,5 @@ export const barChartTypes = {
   withdraw: "Saídas",
   transfer: "Transferências",
 };
+
+export const TRANSACTIONS_PER_PAGE = 6;

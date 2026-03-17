@@ -8,7 +8,14 @@ import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
 import { dateFormatter } from "@/src/utils/functions";
 import { router } from "expo-router";
-import { FlatList, Image, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Transaction, TransactionsListProps, TransactionType } from "../models";
 
 export default function TransactionsList({
@@ -18,6 +25,10 @@ export default function TransactionsList({
   handleActiveTransactionFilter,
   onPressTransaction,
   type,
+  onRefresh,
+  refreshing,
+  onEndReached,
+  loading,
 }: TransactionsListProps) {
   const renderItem = ({ item }: { item: Transaction }) => (
     <TouchableOpacity
@@ -61,13 +72,9 @@ export default function TransactionsList({
     </TouchableOpacity>
   );
 
-  return (
-    <View
-      style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22, flex: 1 }}
-    >
+  const listHeaderComponent = () => (
+    <>
       <Navbar title={"Transactions"} />
-
-      <ElipsesBackground />
 
       <View style={{ gap: 16 }}>
         <View
@@ -134,15 +141,39 @@ export default function TransactionsList({
             }
           />
         </View>
-
-        <FlatList
-          data={transactions}
-          renderItem={renderItem}
-          contentContainerStyle={{ gap: 16 }}
-          keyExtractor={(item) => item?.id}
-          showsVerticalScrollIndicator={false}
-        />
       </View>
+    </>
+  );
+
+  const listFooterrComponent = () => <ActivityIndicator />;
+
+  const listItemSeparator = () => <View style={{ height: 16 }} />;
+
+  return (
+    <View style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22 }}>
+      <ElipsesBackground />
+
+      <FlatList
+        data={transactions}
+        renderItem={renderItem}
+        contentContainerStyle={{ paddingBottom: 32 }}
+        ListHeaderComponentStyle={{ paddingBottom: 16 }}
+        ItemSeparatorComponent={listItemSeparator}
+        keyExtractor={(item) => item?.id}
+        showsVerticalScrollIndicator={false}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.01}
+        ListHeaderComponent={listHeaderComponent}
+        ListFooterComponent={loading ? listFooterrComponent : null}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#6366f1"
+            colors={["#6366f1"]}
+          />
+        }
+      />
     </View>
   );
 }

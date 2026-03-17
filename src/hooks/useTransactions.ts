@@ -3,6 +3,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
   query,
   setDoc,
   updateDoc,
@@ -11,6 +12,7 @@ import {
 import { useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { db } from "../firebase/config";
+import { TRANSACTIONS_PER_PAGE } from "../screens/transactions/constants";
 import { FormDataProps, Transaction } from "../screens/transactions/models";
 import { useUpload } from "./useUploadFile";
 
@@ -19,6 +21,9 @@ const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionMonths, setTransactionMonths] = useState([]);
   const [transactionYears, setTransactionYears] = useState([]);
+  const [perScroll, setPerScroll] = useState(TRANSACTIONS_PER_PAGE);
+  const [loading, setLoading] = useState(false);
+
   const { uploadFile } = useUpload();
 
   const transactionRef = user
@@ -119,37 +124,38 @@ const useTransactions = () => {
     month?: string;
     category?: string;
   }) => {
-    const queries = [];
+    try {
+      setLoading(true);
 
-    if (year && month) {
-      const monthPadded = String(month).padStart(2, "0");
-      const start = `${year}-${monthPadded}-01`;
-      const end = `${year}-${monthPadded}-31`;
-      queries.push(where("date", ">=", start));
-      queries.push(where("date", "<=", end));
-    } else if (year) {
-      const start = `${year}-01-01`;
-      const end = `${year}-12-31`;
-      queries.push(where("date", ">=", start));
-      queries.push(where("date", "<=", end));
+      const queries = [];
+
+      if (year && month) {
+        const monthPadded = String(month).padStart(2, "0");
+        const start = `${year}-${monthPadded}-01`;
+        const end = `${year}-${monthPadded}-31`;
+        queries.push(where("date", ">=", start));
+        queries.push(where("date", "<=", end));
+      } else if (year) {
+        const start = `${year}-01-01`;
+        const end = `${year}-12-31`;
+        queries.push(where("date", ">=", start));
+        queries.push(where("date", "<=", end));
+      }
+
+      if (category) {
+        queries.push(where("category.key", "==", category));
+      }
+
+      const response = await getDocs(
+        query(transactionRef, limit(perScroll), ...queries),
+      );
+      const docs = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setTransactions(docs);
+    } catch (error) {
+      console.log("Error: ", error);
+    } finally {
+      setLoading(false);
     }
-
-    if (category) {
-      queries.push(where("category.key", "==", category));
-    }
-
-    const response = await getDocs(
-      query(
-        transactionRef,
-        ...queries,
-        // where("date", ">=", Timestamp.fromDate(start)),
-        // where("date", "<=", Timestamp.fromDate(end)),
-        // where("category.key", "==", category),
-        // orderBy("date", "desc"),
-      ),
-    );
-    const docs = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    setTransactions(docs);
   };
 
   return {
@@ -162,6 +168,10 @@ const useTransactions = () => {
     transactionMonths,
     transactionYears,
     filterTransactions,
+    perScroll,
+    setPerScroll,
+    setLoading,
+    loading,
   };
 };
 

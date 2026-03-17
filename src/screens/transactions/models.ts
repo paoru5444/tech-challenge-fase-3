@@ -35,6 +35,7 @@ export interface TransactionsListProps {
   transactions: Transaction[];
   handleActiveTransactionFilter: (value: TransactionType) => void;
   onPressTransaction: (item: Transaction) => void;
+  onEndReached: () => void;
 }
 
 export enum FORM_MODE {
