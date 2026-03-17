@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { db } from "../firebase/config";
 import { TRANSACTIONS_PER_PAGE } from "../screens/transactions/constants";
@@ -158,6 +158,10 @@ const useTransactions = () => {
     }
   };
 
+  const lastTransactions = useMemo(() => {
+    return transactions.slice(0, 3);
+  }, [transactions]);
+
   return {
     getTransactions,
     addTransactions,
@@ -172,6 +176,7 @@ const useTransactions = () => {
     setPerScroll,
     setLoading,
     loading,
+    lastTransactions,
   };
 };
 

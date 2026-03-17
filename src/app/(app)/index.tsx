@@ -1,4 +1,4 @@
-import Home from "@/src/screens/home";
+import Home from "@/src/screens/home/screens/home";
 import React from "react";
 
 export default function Index() {

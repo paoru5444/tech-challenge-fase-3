@@ -6,10 +6,13 @@ import { FORM_TYPES } from "../../transactions/constants";
 
 interface BalanceProps {
   totalBalance: number;
-  handleGoTo: (type: keyof typeof FORM_TYPES) => void;
+  goToTransactionsForm: (type: keyof typeof FORM_TYPES) => void;
 }
 
-export default function Balance({ totalBalance, handleGoTo }: BalanceProps) {
+export default function Balance({
+  totalBalance,
+  goToTransactionsForm,
+}: BalanceProps) {
   return (
     <View style={{ paddingHorizontal: 22, gap: 32 }}>
       <View style={{ alignItems: "center", gap: 2 }}>
@@ -29,7 +32,7 @@ export default function Balance({ totalBalance, handleGoTo }: BalanceProps) {
         }}
       >
         <TouchableOpacity
-          onPress={() => handleGoTo("deposit")}
+          onPress={() => goToTransactionsForm("deposit")}
           style={{
             width: 90,
             height: 90,
@@ -52,7 +55,7 @@ export default function Balance({ totalBalance, handleGoTo }: BalanceProps) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleGoTo("withdraw")}
+          onPress={() => goToTransactionsForm("withdraw")}
           style={{
             width: 90,
             height: 90,
@@ -75,7 +78,7 @@ export default function Balance({ totalBalance, handleGoTo }: BalanceProps) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => handleGoTo("transfer")}
+          onPress={() => goToTransactionsForm("transfer")}
           style={{
             width: 90,
             height: 90,
