@@ -3,7 +3,10 @@ import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import TransactionsListComponent from "../components/transaction-list";
 import { TRANSACTIONS_PER_PAGE } from "../constants";
-import { Transaction, TransactionType } from "../models";
+import {
+  Transaction,
+  TransactionType,
+} from "../models";
 import { navigation } from "../navigation";
 
 export default function TransactionsListScreen() {
@@ -14,7 +17,7 @@ export default function TransactionsListScreen() {
   type transactionListSearchParams = {
     category?: string;
     month?: string;
-    year?: "";
+    year?: string;
   };
 
   const [type, setType] = useState(TransactionType.ALL);

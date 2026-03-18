@@ -76,15 +76,15 @@ const useTransactions = () => {
     }
   };
 
-  const deleteTransaction = async (transactionId: string) => {
+  const deleteTransaction = async (transactionId?: string) => {
     await deleteDoc(
       doc(db, "users", user?.uid ?? "", "transactions", transactionId),
     );
   };
 
   const updateTransaction = async (
-    transactionId: string,
-    transaction: FormDataProps,
+    transactionId?: string,
+    transaction?: FormDataProps,
   ) => {
     await updateDoc(
       doc(db, "users", user?.uid ?? "", "transactions", transactionId),

@@ -2,12 +2,12 @@ import { images } from "@/src/constants";
 
 export const INPUT_FIELDS = [
   {
-    key: "amount",
+    key: "amount" as "amount",
     label: "Valor",
     placeholder: "R$100,00",
   },
   {
-    key: "description",
+    key: "description" as "description",
     label: "Descrição",
     placeholder: "Sua descrição aqui",
   },

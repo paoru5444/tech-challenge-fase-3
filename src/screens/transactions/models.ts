@@ -1,16 +1,19 @@
+import { formInSchema } from "@/src/schemas/transaction-form-schema";
+import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import * as z from "zod";
 import { FORM_TYPES } from "./constants";
 
-export type CurrentForm = {
-  actionLabel: string;
-  image: string;
-  navbarLabel: string;
-  type: keyof typeof FORM_TYPES;
-  id: string;
+export type TransactionFormLocalSearchParams = {
+  actionLabel?: string;
+  image?: string;
+  navbarLabel?: string;
+  type?: keyof typeof FORM_TYPES;
+  id?: string;
   amount?: string;
-  category?: CategoryType;
   date?: string;
   description?: string;
   mode?: string;
+  fileName?: string;
 };
 
 export enum TransactionType {
@@ -44,8 +47,7 @@ export enum FORM_MODE {
 export type TransactionFormItem = {
   label: string;
   placeholder: string;
-  // key: string;
-  key: "amount" | "description" | "date" | "category";
+  key: "amount" | "description";
 };
 
 export type FormDataProps = {
@@ -61,11 +63,17 @@ export type FormTypeProps = {
   actionLabel: string;
   type: string;
 };
+export type File = {
+  __collector: any;
+  blobId: string;
+  name: string;
+  offset: number;
+  size: number;
+  type: string;
+};
 
 export interface TransactionFormProps {
-  handleInputChange: (key: string, value: string) => void;
-  currentForm: CurrentForm;
-  formData: FormDataProps;
+  localSearchParams?: TransactionFormLocalSearchParams;
   onCreate: () => void;
   onUpdate: () => void;
   onDelete: () => void;
@@ -74,6 +82,14 @@ export interface TransactionFormProps {
   openCalendarBottomSheet: () => void;
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
+  control: Control<FormDataProps>;
+  errors: FieldErrors<FormDataProps>;
+  handleGetFile: () => void;
+  isSubmitting: boolean;
+  pageTitle: string;
+  file: File | null;
+  isReadOnly: boolean;
+  setValue: UseFormSetValue<FormDataProps>;
 }
 
 export type Transaction = {
@@ -84,3 +100,35 @@ export type Transaction = {
   id: string;
   type: TransactionType;
 };
+
+export type FormData = z.infer<typeof formInSchema>;
+
+export type TransactionMode = "create" | "update" | "view";
+
+export type TransactionFormScreenLocalSearchParams = {
+  actionLabel?: string;
+  image?: any;
+  mode?: "create" | "update" | "view";
+  navbarLabel?: string;
+  type?: "deposit" | "withdraw" | "transfer";
+  amount?: string;
+  categoryKey?: string;
+  categoryValue?: string;
+  date?: string;
+  description?: string;
+  id?: string;
+};
+
+export interface onCreateTransaction {
+  amount: string;
+  category: { key: string; value: string };
+  date: string;
+  description: string;
+}
+
+export interface onUpdateTransaction {
+  amount: string;
+  category: { key: string; value: string };
+  date: string;
+  description: string;
+}

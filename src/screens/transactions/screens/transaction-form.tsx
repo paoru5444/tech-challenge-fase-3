@@ -1,93 +1,81 @@
 import useTransactions from "@/src/hooks/useTransactions";
 import { useUpload } from "@/src/hooks/useUploadFile";
+import { formInSchema } from "@/src/schemas/transaction-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
-import * as z from "zod";
 import TransactionForm from "../components/transaction-form";
 import { FORM_TYPES } from "../constants";
 import { useTransactionsContext } from "../context/transactionsContext";
-import { CategoryType, CurrentForm, FormDataProps } from "../models";
-
-export const formInSchema = z.object({
-  amount: z.string().min(1, "O valor deve ser preenchido"),
-  description: z
-    .string()
-    .min(1, "Descrição deve ser preenchda")
-    .max(20, "Limite de caracteres excedido"),
-  date: z.string().min(1, "Selecione uma data"),
-  category: z.object({
-    key: z.string().min(1, "Selecione uma categoria"),
-    value: z.string().min(1, "Selecione uma categoria"),
-  }),
-});
-
-export type FormData = z.infer<typeof formInSchema>;
+import {
+  FormDataProps,
+  onCreateTransaction,
+  onUpdateTransaction,
+  TransactionFormScreenLocalSearchParams,
+} from "../models";
 
 export default function TransactionFormScreen() {
+  const [isEditing, setIsEditing] = useState(false);
+  const { getFile, file, blob } = useUpload();
   const { selectedCategory, selectedDate } = useTransactionsContext();
   const { addTransactions, deleteTransaction, updateTransaction } =
     useTransactions();
-  const currentForm = useLocalSearchParams<CurrentForm>();
-  const isReadOnly = currentForm?.mode === "view";
+  const localSearchParams =
+    useLocalSearchParams<TransactionFormScreenLocalSearchParams>();
 
-  const formType = FORM_TYPES[currentForm.type];
-  const [isEditing, setIsEditing] = useState(false);
-  const { getFile, file, blob } = useUpload();
+  const type = localSearchParams.type ?? "deposit";
+  const isReadOnly = localSearchParams?.mode === "view";
 
-  const [formData, setFormData] = useState<FormDataProps>({
-    amount: currentForm?.amount || "",
-    description: currentForm?.description || "",
-    date: currentForm?.date || "",
-    category: currentForm?.category || { key: "", value: "" },
-  });
+  const formType = FORM_TYPES[type];
 
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<FormDataProps>({
     resolver: zodResolver(formInSchema),
     defaultValues: {
-      amount: currentForm?.amount || "",
-      description: currentForm?.description || "",
-      date: currentForm?.date || "",
+      amount: localSearchParams?.amount || "",
+      description: localSearchParams?.description || "",
+      date: localSearchParams?.date || "",
       category: {
-        key: currentForm?.categoryKey || "",
-        value: currentForm?.categoryValue || "",
+        key: localSearchParams?.categoryKey || "",
+        value: localSearchParams?.categoryValue || "",
       },
     },
   });
 
-  const handleInputChange = (key: string, value: string | CategoryType) => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
   useEffect(() => {
     const category = !selectedCategory.key
       ? {
-          key: currentForm?.categoryKey || "",
-          value: currentForm?.categoryValue || "",
+          key: localSearchParams?.categoryKey || "",
+          value: localSearchParams?.categoryValue || "",
         }
       : selectedCategory;
 
-    setValue("category", category);
-    setValue("date", selectedDate || currentForm?.date);
-  }, [selectedCategory, selectedDate]);
+    const date = selectedDate || localSearchParams?.date || "";
 
-  const onCreate = (data) => {
+    setValue("category", category);
+    setValue("date", date);
+  }, [
+    localSearchParams?.categoryKey,
+    localSearchParams?.categoryValue,
+    localSearchParams?.date,
+    selectedCategory,
+    selectedDate,
+  ]);
+
+  const onCreate = (data: onCreateTransaction) => {
     Keyboard.dismiss();
+    console.log("onCreate data: ", data);
 
     addTransactions(
       {
         ...data,
-        type: currentForm.type,
+        type: localSearchParams.type,
       },
       file,
       blob,
@@ -97,13 +85,13 @@ export default function TransactionFormScreen() {
   };
 
   const onDelete = () => {
-    deleteTransaction(currentForm.id);
+    deleteTransaction(localSearchParams.id);
     router.replace("/transactions/list");
   };
 
-  const onUpdate = (data) => {
+  const onUpdate = (data: onUpdateTransaction) => {
     Keyboard.dismiss();
-    updateTransaction(currentForm.id, data);
+    updateTransaction(localSearchParams.id, data);
     router.replace("/transactions/list");
   };
 
@@ -126,9 +114,7 @@ export default function TransactionFormScreen() {
 
   return (
     <TransactionForm
-      handleInputChange={handleInputChange}
-      formData={formData}
-      currentForm={currentForm}
+      localSearchParams={localSearchParams}
       onCreate={handleSubmit(onCreate)}
       onUpdate={handleSubmit(onUpdate)}
       onDelete={onDelete}

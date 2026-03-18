@@ -6,7 +6,9 @@ import Typography from "../typography";
 interface InputProps extends TextInputProps {
   label?: string;
   control?: Control<any>;
-  error?: { message?: string };
+  error?: {
+    message?: string;
+  } | null;
   name?: string;
 }
 
@@ -74,23 +76,13 @@ export default function Input({
         />
       )}
 
-      {error && (
-        <Typography color={"red"}>
-          * {error?.message || error?.message?.category?.key?.message || ""}
-        </Typography>
-      )}
+      {error && <Typography color={"red"}>* {error?.message}</Typography>}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  input: {
-    // borderWidth: 1,
-    // borderColor: "#E5E5EA",
-    // paddingHorizontal: 16,
-    // borderRadius: 15,
-    // height: 40,
-  },
+  input: {},
   label: {
     fontSize: 9,
     fontWeight: 600,

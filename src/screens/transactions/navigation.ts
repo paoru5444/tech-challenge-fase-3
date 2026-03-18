@@ -1,5 +1,8 @@
 import { router } from "expo-router";
-import { FORM_MODE, Transaction } from "./models";
+import {
+  FORM_MODE,
+  Transaction,
+} from "./models";
 
 const goToTransactionsForm = (item: Transaction) => {
   router.push({
@@ -14,5 +17,5 @@ const goToTransactionsForm = (item: Transaction) => {
 };
 
 export const navigation = {
-  goToTransactionsForm
-}
+  goToTransactionsForm,
+};

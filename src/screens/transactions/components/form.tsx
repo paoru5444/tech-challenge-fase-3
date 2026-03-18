@@ -3,6 +3,7 @@ import Select from "@/src/components/ui/select";
 import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
 import React from "react";
+import { Control, FieldErrors } from "react-hook-form";
 import {
   FlatList,
   Image,
@@ -10,65 +11,64 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CategoryType, FormDataProps, TransactionFormItem } from "../models";
+import {
+  File,
+  FormDataProps,
+  TransactionFormItem,
+  TransactionFormLocalSearchParams,
+} from "../models";
 
-interface TransactionFormProps {
+interface FormProps {
   fields: TransactionFormItem[];
-  handleInputChange: (key: string, value: string) => void;
   headerImage: any;
   disableFields?: boolean;
-  formData: FormDataProps;
   openCategoryBottomSheet: () => void;
   openCalendarBottomSheet: () => void;
+  control: Control<FormDataProps>;
+  errors: FieldErrors<FormDataProps>;
+  pageTitle: string;
+  handleGetFile: () => void;
+  file: File | null;
+  isReadOnly: boolean;
+  localSearchParams?: TransactionFormLocalSearchParams;
 }
 
-export default function Filter({
+export default function Form({
   control,
   errors,
   fields,
-  handleInputChange,
   disableFields,
-  formData,
   pageTitle,
   openCategoryBottomSheet,
   openCalendarBottomSheet,
   handleGetFile,
   file,
   isReadOnly,
-  currentForm,
-}: TransactionFormProps) {
+  localSearchParams,
+}: FormProps) {
   const headerComponent = () => (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
-        // justifyContent: "space-between",
       }}
     >
-      {/* <Image source={images.transfer} style={styles.headerImage} /> */}
       <Typography size={24} weight="800">
         {pageTitle}
       </Typography>
     </View>
   );
 
-  const renderItem = ({ item }: { item: TransactionFormItem }) => {
-    const selectedItem: string | CategoryType = formData[item.key];
-
-    const value = item.key === "category" ? selectedItem.value : selectedItem;
-    return (
-      <Input
-        control={control}
-        label={item.label}
-        value={value}
-        onChangeText={(value: string) => handleInputChange(item.key, value)}
-        placeholder={item.placeholder}
-        editable={!disableFields}
-        name={item.key}
-        error={errors[item.key]}
-      />
-    );
-  };
+  const renderItem = ({ item }: { item: TransactionFormItem }) => (
+    <Input
+      control={control}
+      label={item.label}
+      placeholder={item.placeholder}
+      editable={!disableFields}
+      name={item.key}
+      error={errors[item?.key]}
+    />
+  );
 
   const footerComponent = () => (
     <View style={{ gap: 16 }}>
@@ -112,7 +112,7 @@ export default function Filter({
               </Typography>
 
               <Typography weight="500" size={12}>
-                {currentForm?.fileName}
+                {localSearchParams?.fileName}
               </Typography>
             </View>
           </>

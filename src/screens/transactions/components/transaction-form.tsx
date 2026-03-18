@@ -10,9 +10,7 @@ import { FORM_MODE, TransactionFormProps } from "../models";
 import TrasactionForm from "./form";
 
 export default function TransactionForm({
-  handleInputChange,
-  currentForm,
-  formData,
+  localSearchParams,
   onCreate,
   onUpdate,
   onDelete,
@@ -23,7 +21,6 @@ export default function TransactionForm({
   setIsEditing,
   control,
   errors,
-  setValue,
   isSubmitting,
   pageTitle,
   handleGetFile,
@@ -38,7 +35,6 @@ export default function TransactionForm({
         paddingBottom: 40,
         paddingHorizontal: 22,
         backgroundColor: "#FDFDFD",
-        // gap: 32,
       }}
     >
       <ElipsesBackground />
@@ -47,28 +43,24 @@ export default function TransactionForm({
 
       <TrasactionForm
         fields={INPUT_FIELDS}
-        handleInputChange={handleInputChange}
         headerImage={formType.image}
         pageTitle={pageTitle}
-        disableFields={currentForm.mode === FORM_MODE.VIEW && !isEditing}
-        formData={formData}
+        disableFields={localSearchParams?.mode === FORM_MODE.VIEW && !isEditing}
         openCategoryBottomSheet={openCategoryBottomSheet}
         openCalendarBottomSheet={openCalendarBottomSheet}
         control={control}
         errors={errors}
-        setValue={setValue}
-        isEditing={isEditing}
         handleGetFile={handleGetFile}
         file={file}
         isReadOnly={isReadOnly}
-        currentForm={currentForm}
+        localSearchParams={localSearchParams}
       />
 
-      {currentForm.mode === FORM_MODE.CREATE && (
+      {localSearchParams?.mode === FORM_MODE.CREATE && (
         <Button onPress={onCreate} label={"Salvar"} disabled={isSubmitting} />
       )}
 
-      {currentForm.mode === FORM_MODE.UPDATE && (
+      {localSearchParams?.mode === FORM_MODE.UPDATE && (
         <Button
           onPress={() => {
             onUpdate();
@@ -79,7 +71,7 @@ export default function TransactionForm({
         />
       )}
 
-      {currentForm.mode === FORM_MODE.VIEW && (
+      {localSearchParams?.mode === FORM_MODE.VIEW && (
         <View style={{ gap: 8 }}>
           <Button
             onPress={() => {

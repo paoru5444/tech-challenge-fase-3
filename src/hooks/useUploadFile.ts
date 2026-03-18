@@ -2,10 +2,11 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
 import DocumentPicker from "react-native-document-picker";
 import { useAuth } from "../context/auth.context";
+import { File } from "../screens/transactions/models";
 
 export function useUpload() {
   const { user } = useAuth();
-  const [file, setFile] = useState({});
+  const [file, setFile] = useState<File | null>(null);
   const [blob, setBlob] = useState({});
 
   const getFile = async () => {

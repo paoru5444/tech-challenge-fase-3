@@ -1,9 +1,9 @@
 declare module "*.png" {
-  const value: any;
+  const value: ImageSourcePropType | undefined;
   export default value;
 }
 
 declare module "*svg" {
-  const value: any;
+  const value: ImageSourcePropType | undefined;
   export default value;
 }

@@ -1,6 +1,7 @@
 import { icons } from "@/src/constants/icons";
+import { FormDataProps } from "@/src/screens/transactions/models";
 import React from "react";
-import { Controller } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import {
   Image,
   StyleSheet,
@@ -13,7 +14,10 @@ import Typography from "../typography";
 
 interface SelectProps extends TextInputProps {
   label?: string;
-  error?: string;
+  error?: { message?: string };
+  name: "date" | "category";
+  control: Control<FormDataProps>;
+  disableFields?: boolean;
 }
 
 export default function Select({
