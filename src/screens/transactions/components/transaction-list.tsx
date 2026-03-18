@@ -16,7 +16,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { barChartTypes } from "../constants";
 import { Transaction, TransactionsListProps, TransactionType } from "../models";
+import { utils } from "../utils";
 
 export default function TransactionsList({
   search,
@@ -30,51 +32,57 @@ export default function TransactionsList({
   onEndReached,
   loading,
 }: TransactionsListProps) {
-  const renderItem = ({ item }: { item: Transaction }) => (
-    <TouchableOpacity
-      style={{
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: 16,
-        backgroundColor: "#fff",
-        borderRadius: 15,
-      }}
-      onPress={() => onPressTransaction(item)}
-    >
-      <View style={{ gap: 4 }}>
-        <Typography size={12} style={{ color: "#8E8E93" }}>
-          {item.category?.value}
-        </Typography>
-        <Typography style={{ fontWeight: 600 }}>{item.description}</Typography>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-          <Image
-            source={icons.calendarCache}
-            style={{ width: 16, height: 16 }}
-          />
+  const renderItem = ({ item }: { item: Transaction }) => {
+    const typeIcon = utils.pickTransactionTypeIcon(item?.type);
 
-          <Typography size={12} color="#8E8E93">
-            {dateFormatter(item.date)}
-          </Typography>
-        </View>
-      </View>
-
-      <View
+    return (
+      <TouchableOpacity
         style={{
-          alignItems: "flex-end",
+          flexDirection: "row",
+          alignItems: "center",
           justifyContent: "space-between",
-          gap: 16,
+          padding: 16,
+          backgroundColor: "#fff",
+          borderRadius: 15,
         }}
+        onPress={() => onPressTransaction(item)}
       >
-        <Image source={icons[item.type]} style={{ width: 24, height: 24 }} />
-        <Typography style={{ fontWeight: 600 }}>R$ {item.amount}</Typography>
-      </View>
-    </TouchableOpacity>
-  );
+        <View style={{ gap: 4 }}>
+          <Typography size={12} style={{ color: "#8E8E93" }}>
+            {item.category?.value}
+          </Typography>
+          <Typography style={{ fontWeight: 600 }}>
+            {item.description}
+          </Typography>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            <Image
+              source={icons.calendarCache}
+              style={{ width: 16, height: 16 }}
+            />
+
+            <Typography size={12} color="#8E8E93">
+              {dateFormatter(item.date)}
+            </Typography>
+          </View>
+        </View>
+
+        <View
+          style={{
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 16,
+          }}
+        >
+          <Image source={typeIcon} style={{ width: 24, height: 24 }} />
+          <Typography style={{ fontWeight: 600 }}>R$ {item.amount}</Typography>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   const listHeaderComponent = () => (
     <>
-      <Navbar title={"Transactions"} />
+      <Navbar showHeader={false} />
 
       <View style={{ gap: 16 }}>
         <View
@@ -114,32 +122,14 @@ export default function TransactionsList({
         </View>
 
         <View style={{ gap: 5, flexDirection: "row" }}>
-          <Badge
-            label="All"
-            isActive={type === "all"}
-            onPress={() => handleActiveTransactionFilter(TransactionType.ALL)}
-          />
-          <Badge
-            label="Deposit"
-            isActive={type === "deposit"}
-            onPress={() =>
-              handleActiveTransactionFilter(TransactionType.DEPOSIT)
-            }
-          />
-          <Badge
-            label="Withdraw"
-            isActive={type === "withdraw"}
-            onPress={() =>
-              handleActiveTransactionFilter(TransactionType.WITHDRAW)
-            }
-          />
-          <Badge
-            label="Transfer"
-            isActive={type === "transfer"}
-            onPress={() =>
-              handleActiveTransactionFilter(TransactionType.TRANSFER)
-            }
-          />
+          {Object.values(TransactionType).map((transactionType) => (
+            <Badge
+              label={barChartTypes[transactionType]}
+              isActive={type === transactionType}
+              onPress={() => handleActiveTransactionFilter(transactionType)}
+              key={transactionType}
+            />
+          ))}
         </View>
       </View>
     </>

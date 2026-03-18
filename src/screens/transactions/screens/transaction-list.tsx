@@ -1,17 +1,25 @@
-import useTransactions, { Transaction } from "@/src/hooks/useTransactions";
-import { router, useLocalSearchParams } from "expo-router";
+import useTransactions from "@/src/hooks/useTransactions";
+import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import TransactionsListComponent from "../components/transaction-list";
 import { TRANSACTIONS_PER_PAGE } from "../constants";
-import { FORM_MODE, TransactionType } from "../models";
+import { Transaction, TransactionType } from "../models";
+import { navigation } from "../navigation";
 
 export default function TransactionsListScreen() {
   const { filterTransactions, transactions, perScroll, setPerScroll, loading } =
     useTransactions();
   const [search, setSearch] = useState("");
+
+  type transactionListSearchParams = {
+    category?: string;
+    month?: string;
+    year?: "";
+  };
+
   const [type, setType] = useState(TransactionType.ALL);
-  const { category, month, year } = useLocalSearchParams();
-  const [badgeActive, setBadgeActive] = useState("All");
+  const { category, month, year } =
+    useLocalSearchParams<transactionListSearchParams>();
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -23,7 +31,6 @@ export default function TransactionsListScreen() {
   };
 
   const handleActiveTransactionFilter = (value: TransactionType) => {
-    setBadgeActive(value);
     setType(value);
   };
 
@@ -42,20 +49,11 @@ export default function TransactionsListScreen() {
   }, [transactions, search, type]);
 
   const onPressTransaction = (item: Transaction) => {
-    router.push({
-      pathname: "/transactions/form",
-      params: {
-        ...item,
-        categoryKey: item.category.key,
-        categoryValue: item.category.value,
-        mode: FORM_MODE.VIEW,
-      },
-    });
+    navigation.goToTransactionsForm(item);
   };
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-
     try {
       filterTransactions({ category, month, year });
     } finally {
@@ -65,7 +63,6 @@ export default function TransactionsListScreen() {
 
   const onEndReached = () => {
     if (perScroll > transactions.length && transactions.length !== 0) return;
-
     setPerScroll((prev: number) => prev + TRANSACTIONS_PER_PAGE);
   };
 
@@ -77,7 +74,6 @@ export default function TransactionsListScreen() {
       handleActiveTransactionFilter={handleActiveTransactionFilter}
       onPressTransaction={onPressTransaction}
       type={type}
-      setBadgeActive={setBadgeActive}
       onRefresh={onRefresh}
       refreshing={refreshing}
       onEndReached={onEndReached}

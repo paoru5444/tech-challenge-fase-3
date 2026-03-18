@@ -1,6 +1,7 @@
 import calendarCache from "@/assets/icons/calendar-cash.png";
 import chevronDown from "@/assets/icons/chevron-down.png";
 import chevronRight from "@/assets/icons/chevron-right.png";
+import defaultIcon from "@/assets/icons/default-icon.png";
 import depositOutline from "@/assets/icons/deposit-outline.png";
 import deposit from "@/assets/icons/deposit.png";
 import fileDownload from "@/assets/icons/file-download.png";
@@ -26,4 +27,5 @@ export const icons = {
   chevronDown,
   fileUpload,
   fileDownload,
+  defaultIcon,
 };

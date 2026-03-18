@@ -10,8 +10,8 @@ import Typography from "../typography";
 interface BadgeProps extends TouchableOpacityProps {
   isActive?: boolean;
   label: string;
-  icon: any;
-  labelSize: number;
+  icon?: any;
+  labelSize?: number;
 }
 
 export default function Badge({

@@ -13,13 +13,6 @@ export type CurrentForm = {
   mode?: string;
 };
 
-// export interface TransactionFormProps {
-//   handleInputChange: any;
-//   onCreate: any;
-//   fields: any;
-//   currentForm: CurrentForm;
-// }
-
 export enum TransactionType {
   "ALL" = "all",
   "DEPOSIT" = "deposit",
@@ -36,6 +29,10 @@ export interface TransactionsListProps {
   handleActiveTransactionFilter: (value: TransactionType) => void;
   onPressTransaction: (item: Transaction) => void;
   onEndReached: () => void;
+  type: TransactionType;
+  onRefresh: () => void;
+  refreshing: boolean;
+  loading: boolean;
 }
 
 export enum FORM_MODE {
