@@ -13,41 +13,60 @@ const getMonths = (transactions: Transaction[]) => {
   return Array.from(monthsSet);
 };
 
+type ChartData =
+  | {
+      label: string;
+      value: number;
+    }
+  | [];
+
 export default function useAnalytics() {
   const { getTransactions } = useTransactions();
 
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
 
   const getCharData = useCallback(
     async (type: TransactionType) => {
-      const transactions = await getTransactions();
+      try {
+        const transactions = await getTransactions();
 
-      const months = getMonths(transactions);
+        if (!transactions) {
+          throw new Error("Erro ao buscar transactions");
+        }
 
-      const item = months.sort().map((month) => {
-        const count = transactions.reduce((acc, item) => {
-          const itemMonth = item.date.split("-")[1];
-          const itemAmount = parseFloat(item.amount);
-          const hasMatchCategory = item.type === type;
+        const months = getMonths(transactions);
 
-          if (
-            itemMonth === month &&
-            !!itemAmount &&
-            (hasMatchCategory || type === "all")
-          ) {
-            return acc + itemAmount;
-          }
+        const item: ChartData[] =
+          months.sort().map((month) => {
+            const count = transactions.reduce(
+              (acc: number, item: Transaction) => {
+                const itemMonth = item.date.split("-")[1];
+                const itemAmount = parseFloat(item.amount);
+                const hasMatchCategory = item.type === type;
 
-          return acc;
-        }, 0);
+                if (
+                  itemMonth === month &&
+                  !!itemAmount &&
+                  (hasMatchCategory || type === "all")
+                ) {
+                  return acc + itemAmount;
+                }
 
-        return {
-          label: monthNames[parseInt(month) - 1],
-          value: count,
-        };
-      });
+                return acc;
+              },
+              0,
+            );
 
-      setChartData([...item]);
+            return {
+              label: monthNames[parseInt(month) - 1],
+              value: count,
+            };
+          }) || [];
+
+        setChartData([...item]);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
     },
     [getTransactions],
   );

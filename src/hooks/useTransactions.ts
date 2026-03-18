@@ -19,8 +19,8 @@ import { useUpload } from "./useUploadFile";
 const useTransactions = () => {
   const { user } = useAuth();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [transactionMonths, setTransactionMonths] = useState([]);
-  const [transactionYears, setTransactionYears] = useState([]);
+  const [transactionMonths, setTransactionMonths] = useState<string[] | []>([]);
+  const [transactionYears, setTransactionYears] = useState<string[] | []>([]);
   const [perScroll, setPerScroll] = useState(TRANSACTIONS_PER_PAGE);
   const [loading, setLoading] = useState(false);
 
@@ -30,12 +30,15 @@ const useTransactions = () => {
     ? collection(db, "users", user?.uid ?? "", "transactions")
     : null;
 
-  const getTransactions = async () => {
+  const getTransactions = async (): Promise<Transaction[] | undefined> => {
     if (!transactionRef) return;
 
     try {
       const response = await getDocs(query(transactionRef));
-      const docs = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const docs: Transaction[] = response.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Transaction, "id">),
+      }));
       setTransactions(docs);
 
       return docs;
@@ -55,15 +58,14 @@ const useTransactions = () => {
       const payload = { ...data };
 
       if (file && blob) {
-        const { url } = await uploadFile({ transactionId, file, blob });
+        const uploadedFile = await uploadFile({ transactionId, file, blob });
 
-        payload.fileUrl = url;
+        payload.fileUrl = uploadedFile?.url;
         payload.fileName = file?.name;
       }
 
       const response = await setDoc(transactionDoc, {
         ...payload,
-        // date: Timestamp.fromDate(new Date(data.date)),
       });
 
       console.log("Transferência adicionada com sucesso: ", response);
@@ -77,25 +79,39 @@ const useTransactions = () => {
   };
 
   const deleteTransaction = async (transactionId?: string) => {
-    await deleteDoc(
-      doc(db, "users", user?.uid ?? "", "transactions", transactionId),
-    );
+    try {
+      if (!transactionId) {
+        throw new Error("TransactionId recebido é inválido");
+      }
+
+      await deleteDoc(
+        doc(db, "users", user?.uid ?? "", "transactions", transactionId),
+      );
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   const updateTransaction = async (
     transactionId?: string,
     transaction?: FormDataProps,
   ) => {
-    await updateDoc(
-      doc(db, "users", user?.uid ?? "", "transactions", transactionId),
-      transaction,
-    );
+    try {
+      if (!transactionId || !transaction) {
+        throw new Error("TransactionId ou Transação recebidos são inválidos");
+      }
+
+      await updateDoc(
+        doc(db, "users", user?.uid ?? "", "transactions", transactionId),
+        transaction,
+      );
+    } catch (error) {}
   };
 
   const getTransactionsYearsAndMonths = async () => {
     try {
-      const months = [];
-      const years = [];
+      const months: string[] = [];
+      const years: string[] = [];
 
       const transactionList = await getTransactions();
 
@@ -112,7 +128,9 @@ const useTransactions = () => {
 
       setTransactionMonths(orderedMonths);
       setTransactionYears(orderedYears);
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   const filterTransactions = async ({
@@ -146,10 +164,18 @@ const useTransactions = () => {
         queries.push(where("category.key", "==", category));
       }
 
+      if (!transactionRef) {
+        throw new Error("Falha ao configurar o transactionRef");
+      }
+
       const response = await getDocs(
         query(transactionRef, limit(perScroll), ...queries),
       );
-      const docs = response.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const docs: Transaction[] = response.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Transaction, "id">),
+      }));
+
       setTransactions(docs);
     } catch (error) {
       console.log("Error: ", error);
