@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const formInSchema = z.object({
-  amount: z.string().min(1, "O valor deve ser preenchido"),
+  amount: z.number("Use números").min(1, "O valor deve ser preenchido"),
   description: z
     .string()
     .min(1, "Descrição deve ser preenchda")

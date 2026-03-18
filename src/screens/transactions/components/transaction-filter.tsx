@@ -19,13 +19,9 @@ export default function TransactionFilter() {
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
 
-  const { getCategories, categories } = useCategories();
-  const {
-    getTransactionsYearsAndMonths,
-    transactionMonths,
-    transactionYears,
-    filterTransactions,
-  } = useTransactions();
+  const { getCategories, categories, loading } = useCategories();
+  const { getTransactionsYearsAndMonths, transactionMonths, transactionYears } =
+    useTransactions();
 
   useEffect(() => {
     getCategories();
@@ -53,14 +49,15 @@ export default function TransactionFilter() {
             justifyContent: "flex-start",
           }}
         >
-          {Object.entries(categories).map(([key, value]) => (
-            <Badge
-              key={key}
-              label={value}
-              onPress={() => setSelectedCategory({ key, value })}
-              isActive={key === selectedCategory.key}
-            />
-          ))}
+          {!loading &&
+            Object.entries(categories).map(([key, value]) => (
+              <Badge
+                key={key}
+                label={value}
+                onPress={() => setSelectedCategory({ key, value })}
+                isActive={key === selectedCategory.key}
+              />
+            ))}
         </View>
 
         <Typography weight="600">Ano: </Typography>
@@ -103,25 +100,22 @@ export default function TransactionFilter() {
           ))}
         </View>
 
-        <Button
-          label="Filtrar"
-          onPress={() => {
-            // filterTransactions({
-            //   month: selectedMonth,
-            //   year: selectedYear,
-            //   category: selectedCategory.key,
-            // });
-            handleSelectedCategory(selectedCategory);
-            router.dismissTo({
-              pathname: "/(app)/transactions/[list]",
-              params: {
-                month: selectedMonth,
-                year: selectedYear,
-                category: selectedCategory.key,
-              },
-            });
-          }}
-        />
+        {!loading && (
+          <Button
+            label="Filtrar"
+            onPress={() => {
+              handleSelectedCategory(selectedCategory);
+              router.dismissTo({
+                pathname: "/(app)/transactions/[list]",
+                params: {
+                  month: selectedMonth,
+                  year: selectedYear,
+                  category: selectedCategory.key,
+                },
+              });
+            }}
+          />
+        )}
       </View>
     </View>
   );

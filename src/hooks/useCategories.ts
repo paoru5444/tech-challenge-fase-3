@@ -25,10 +25,13 @@ const useCategories = () => {
   const [categories, setCategories] = useState<Omit<Categories, "id">[] | {}>(
     {},
   );
+  const [loading, setLoading] = useState(false);
+
   const categoriesRef = collection(db, "categories");
 
   const getCategories = async () => {
     try {
+      setLoading(true);
       const response = await getDocs(query(categoriesRef));
       const docs: Categories[] = response.docs.map((doc) => ({
         id: doc.id,
@@ -37,14 +40,17 @@ const useCategories = () => {
       const normalizedCategory: Omit<Categories, "id"> =
         normalizeCategories(docs);
       setCategories(normalizedCategory);
+      setLoading(false);
     } catch (error) {
       console.log("error: ", error);
+      setLoading(false);
     }
   };
 
   return {
     categories,
     getCategories,
+    loading,
   };
 };
 

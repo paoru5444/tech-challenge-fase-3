@@ -6,7 +6,14 @@ export default function ElipsesBackground() {
   const { width, height } = Dimensions.get("window");
 
   return (
-    <View style={{ width, height, position: "absolute" }}>
+    <View
+      style={{
+        width,
+        height,
+        position: "absolute",
+        backgroundColor: "#FDFDFD",
+      }}
+    >
       <Image
         source={images.greenElispe}
         style={{

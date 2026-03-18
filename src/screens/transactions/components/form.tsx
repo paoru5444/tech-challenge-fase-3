@@ -120,15 +120,17 @@ export default function Form({
           <>
             <Image source={icons.fileUpload} style={styles.footerIcon} />
 
-            <Typography weight="500" size={12}>
-              {file?.name ?? "Enviar arquivo"}
-            </Typography>
-
-            {!file?.name && (
-              <Typography weight="500" size={12} color="#E5E5EA">
-                Imagens, PDF ou documentos
+            <View>
+              <Typography weight="500" size={12}>
+                {file?.name ?? "Enviar arquivo"}
               </Typography>
-            )}
+
+              {!file?.name && (
+                <Typography weight="500" size={12} color="#E5E5EA">
+                  Imagens, PDF ou documentos
+                </Typography>
+              )}
+            </View>
           </>
         )}
       </TouchableOpacity>
