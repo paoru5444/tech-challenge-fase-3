@@ -1,7 +1,7 @@
 import { Redirect } from "expo-router";
 import { ActivityIndicator } from "react-native";
 import { useAuth } from "../context/auth.context";
-import Onboarding from "../screens/onboarding";
+import OnboardingScreen from "../screens/onboarding/screens/onboarding";
 
 export default function Index() {
   const { user, loading } = useAuth();
@@ -15,5 +15,5 @@ export default function Index() {
   }
 
   // return <SignIn />;
-  return <Onboarding />;
+  return <OnboardingScreen />;
 }

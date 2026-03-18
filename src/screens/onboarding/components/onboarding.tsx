@@ -1,15 +1,14 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Typography from "@/src/components/ui/typography";
 import { images } from "@/src/constants";
-import { router } from "expo-router";
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 
-const handleGettingStarted = () => {
-  router.push("/sign-in");
-};
+interface OnboardingProps {
+  onPressGettingStarted: () => void;
+}
 
-export default function Onboarding() {
+export default function Onboarding({ onPressGettingStarted }: OnboardingProps) {
   return (
     <View
       style={{
@@ -47,7 +46,7 @@ export default function Onboarding() {
         </View>
 
         <TouchableOpacity
-          onPress={handleGettingStarted}
+          onPress={onPressGettingStarted}
           style={{
             backgroundColor: "#9260F4",
             height: 50,
