@@ -1,8 +1,7 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Typography from "@/src/components/ui/typography";
-import { router } from "expo-router";
 import React from "react";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import Navbar from "../../../components/shared/navbar";
 import { FORM_TYPES } from "../../transactions/constants";
 import { Transaction, TransactionType } from "../../transactions/models";
@@ -55,9 +54,7 @@ export default function Home({
       </View>
 
       <View style={{ gap: 16 }}>
-        <TouchableOpacity onPress={() => router.push("/transactions/list")}>
-          <Typography weight="600">Ulitmas Transações</Typography>
-        </TouchableOpacity>
+        <Typography weight="600">Ulitmas Transações</Typography>
 
         <LastTransactions
           lastTransactions={lastTransactions}

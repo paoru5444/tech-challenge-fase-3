@@ -7,6 +7,9 @@ export default function AppLayout() {
     <TransactionsProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack />
+
+        <Stack.Screen name="transaction-form" />
+
         <Stack.Screen
           name="categories-bottom-sheet"
           options={{

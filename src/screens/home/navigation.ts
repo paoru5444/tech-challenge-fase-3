@@ -8,7 +8,7 @@ const openTypesBottomSheet = () => {
 
 const goToTransactionsForm = (type: keyof typeof FORM_TYPES) => {
   router.push({
-    pathname: "/transactions/form",
+    pathname: "/(app)/transaction-form",
     params: { ...FORM_TYPES[type], mode: FORM_MODE.CREATE },
   });
 };

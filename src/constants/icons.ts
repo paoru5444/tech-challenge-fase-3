@@ -7,6 +7,9 @@ import deposit from "@/assets/icons/deposit.png";
 import fileDownload from "@/assets/icons/file-download.png";
 import fileUpload from "@/assets/icons/file-upload.png";
 import filter from "@/assets/icons/filter.png";
+import home from "@/assets/icons/home.png";
+import profile from "@/assets/icons/profile.png";
+import switchIcon from "@/assets/icons/switch-icon.png";
 import transferOutline from "@/assets/icons/transfer-outline.png";
 import transfer from "@/assets/icons/transfer.png";
 import upload from "@/assets/icons/upload.png";
@@ -28,4 +31,7 @@ export const icons = {
   fileUpload,
   fileDownload,
   defaultIcon,
+  profile,
+  switchIcon,
+  home,
 };
