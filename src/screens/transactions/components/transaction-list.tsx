@@ -80,8 +80,14 @@ export default function TransactionsList({
     );
   };
 
-  const listHeaderComponent = () => (
-    <>
+  const listFooterComponent = () => <ActivityIndicator />;
+
+  const listItemSeparator = () => <View style={{ height: 16 }} />;
+
+  return (
+    <View style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22 }}>
+      <ElipsesBackground />
+
       <Navbar showHeader={false} />
 
       <View style={{ gap: 16 }}>
@@ -132,29 +138,18 @@ export default function TransactionsList({
           ))}
         </View>
       </View>
-    </>
-  );
-
-  const listFooterrComponent = () => <ActivityIndicator />;
-
-  const listItemSeparator = () => <View style={{ height: 16 }} />;
-
-  return (
-    <View style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22 }}>
-      <ElipsesBackground />
 
       <FlatList
         data={transactions}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 32 }}
-        ListHeaderComponentStyle={{ paddingBottom: 16 }}
+        contentContainerStyle={{ paddingBottom: 32, paddingTop: 16 }}
         ItemSeparatorComponent={listItemSeparator}
         keyExtractor={(item) => item?.id}
         showsVerticalScrollIndicator={false}
         onEndReached={onEndReached}
         onEndReachedThreshold={0.01}
-        ListHeaderComponent={listHeaderComponent}
-        ListFooterComponent={loading ? listFooterrComponent : null}
+        ListFooterComponent={loading ? listFooterComponent : null}
+        keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

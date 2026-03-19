@@ -9,7 +9,7 @@ const useBalance = ({ transactions }: { transactions: Transaction[] }) => {
       }
       return acc + parseFloat(item.amount);
     }, 0);
-  }, [transactions]);
+  }, [transactions]).toFixed(2);
 
   return { totalBalance };
 };

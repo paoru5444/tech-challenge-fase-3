@@ -8,6 +8,7 @@ import { Transaction, TransactionType } from "../../transactions/models";
 import Analytics from "../components/analytics";
 import Balance from "../components/balance";
 import LastTransactions from "../components/last-transactions";
+import EmptyAnalytics from "./empty-analytics";
 
 interface HomeProps {
   totalBalance: number;
@@ -46,21 +47,28 @@ export default function Home({
 
       <View style={{ width: "100%", gap: 16 }}>
         <Typography weight="600">Analises</Typography>
-        <Analytics
-          chartData={chartData}
-          openTypesBottomSheet={openTypesBottomSheet}
-          selectedType={selectedType}
-        />
+
+        {!chartData?.length ? (
+          <EmptyAnalytics />
+        ) : (
+          <Analytics
+            chartData={chartData}
+            openTypesBottomSheet={openTypesBottomSheet}
+            selectedType={selectedType}
+          />
+        )}
       </View>
 
-      <View style={{ gap: 16 }}>
-        <Typography weight="600">Ulitmas Transações</Typography>
+      {lastTransactions.length && (
+        <View style={{ gap: 16 }}>
+          <Typography weight="600">Ulitmas Transações</Typography>
 
-        <LastTransactions
-          lastTransactions={lastTransactions}
-          selectedType={selectedType}
-        />
-      </View>
+          <LastTransactions
+            lastTransactions={lastTransactions}
+            selectedType={selectedType}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }

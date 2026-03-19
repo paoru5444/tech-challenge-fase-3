@@ -1,14 +1,19 @@
-import { icons } from "@/src/constants/icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Image } from "react-native";
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#6C47FF",
+        tabBarActiveTintColor: "#5F33E1",
+        tabBarStyle: {
+          backgroundColor: "#FDFDFD",
+          height: 70,
+          borderTopEndRadius: 32,
+          borderTopStartRadius: 32,
+        },
       }}
     >
       <Tabs.Screen
@@ -16,7 +21,7 @@ export default function TabsLayout() {
         options={{
           title: "Início",
           tabBarIcon: ({ color }) => (
-            <Image source={icons.home} style={{ width: 24, height: 24 }} />
+            <Ionicons name="home" color={color} size={16} />
           ),
         }}
       />
@@ -25,10 +30,7 @@ export default function TabsLayout() {
         options={{
           title: "Transações",
           tabBarIcon: ({ color }) => (
-            <Image
-              source={icons.switchIcon}
-              style={{ width: 24, height: 24 }}
-            />
+            <Ionicons name="swap-horizontal-outline" color={color} size={16} />
           ),
         }}
       />
@@ -37,7 +39,7 @@ export default function TabsLayout() {
         options={{
           title: "Perfil",
           tabBarIcon: ({ color }) => (
-            <Image source={icons.profile} style={{ width: 24, height: 24 }} />
+            <Ionicons name="person" color={color} size={16} />
           ),
         }}
       />

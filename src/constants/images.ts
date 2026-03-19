@@ -7,6 +7,7 @@ import yellowElispe from "@/assets/images/blur-elipses/yellow-elipse.png";
 import deposit from "@/assets/images/deposit.png";
 import logo from "@/assets/images/logo.png";
 import onboarding from "@/assets/images/onboarding.png";
+import registerTransaction from "@/assets/images/register-transaction.png";
 import transfer from "@/assets/images/trasnfer.png";
 import withdraw from "@/assets/images/withdraw.png";
 
@@ -22,4 +23,5 @@ export const images = {
   purpleElispe,
   yellowElispe,
   longPurpleElispe,
+  registerTransaction,
 };

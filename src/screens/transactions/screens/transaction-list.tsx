@@ -26,9 +26,9 @@ export default function TransactionsListScreen() {
     filterTransactions({ category, month, year });
   }, [category, month, year, perScroll]);
 
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = useCallback((value: string) => {
     setSearch(value);
-  };
+  }, []);
 
   const handleActiveTransactionFilter = (value: TransactionType) => {
     setType(value);
@@ -65,7 +65,7 @@ export default function TransactionsListScreen() {
     if (perScroll > transactions.length && transactions.length !== 0) return;
     setPerScroll((prev: number) => prev + TRANSACTIONS_PER_PAGE);
   };
-
+  console.log("re-render");
   return (
     <TransactionsListComponent
       search={search}

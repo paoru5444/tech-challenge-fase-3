@@ -51,7 +51,7 @@ export default function Balance({
             source={icons.depositOutline}
             style={{ width: 24, height: 24 }}
           />
-          <Typography size={12}>Entradas</Typography>
+          <Typography size={12}>Entrada</Typography>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -74,7 +74,7 @@ export default function Balance({
             source={icons.withdrawOutline}
             style={{ width: 24, height: 24 }}
           />
-          <Typography size={12}>Saídas</Typography>
+          <Typography size={12}>Saída</Typography>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -97,7 +97,7 @@ export default function Balance({
             source={icons.transferOutline}
             style={{ width: 24, height: 24 }}
           />
-          <Typography size={12}>Transações</Typography>
+          <Typography size={12}>Transação</Typography>
         </TouchableOpacity>
       </View>
     </View>

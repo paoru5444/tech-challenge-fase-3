@@ -106,7 +106,7 @@ export default function TransactionFilter() {
             onPress={() => {
               handleSelectedCategory(selectedCategory);
               router.dismissTo({
-                pathname: "/(app)/transactions/[list]",
+                pathname: "/(app)/(tabs)/transactions-list",
                 params: {
                   month: selectedMonth,
                   year: selectedYear,
