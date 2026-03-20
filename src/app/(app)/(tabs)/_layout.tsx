@@ -11,9 +11,8 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: "#FDFDFD",
           height: 70,
-          borderTopEndRadius: 32,
-          borderTopStartRadius: 32,
         },
+        sceneStyle: { backgroundColor: "#FDFDFD" },
       }}
     >
       <Tabs.Screen

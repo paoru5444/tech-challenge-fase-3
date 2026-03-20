@@ -6,7 +6,7 @@ import Home from "../components/home";
 import { goToTransactionsForm, openTypesBottomSheet } from "../navigation";
 
 export default function HomeScreen() {
-  const { transactions, getTransactions, lastTransactions } = useTransactions();
+  const { transactions, getTransactions, lastTransactions, loading } = useTransactions();
   const { totalBalance } = useBalance({ transactions });
   const { selectedType, chartData, fetchChartData } = useTransactionsContext();
 
@@ -23,6 +23,7 @@ export default function HomeScreen() {
       openTypesBottomSheet={openTypesBottomSheet}
       selectedType={selectedType}
       lastTransactions={lastTransactions}
+      loading={loading}
     />
   );
 }

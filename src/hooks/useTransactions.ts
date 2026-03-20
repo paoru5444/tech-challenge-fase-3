@@ -22,7 +22,7 @@ const useTransactions = () => {
   const [transactionMonths, setTransactionMonths] = useState<string[] | []>([]);
   const [transactionYears, setTransactionYears] = useState<string[] | []>([]);
   const [perScroll, setPerScroll] = useState(TRANSACTIONS_PER_PAGE);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { uploadFile } = useUpload();
 
@@ -33,6 +33,8 @@ const useTransactions = () => {
   const getTransactions = async (): Promise<Transaction[] | undefined> => {
     if (!transactionRef) return;
 
+    setLoading(true);
+
     try {
       const response = await getDocs(query(transactionRef));
       const docs: Transaction[] = response.docs.map((doc) => ({
@@ -40,9 +42,10 @@ const useTransactions = () => {
         ...(doc.data() as Omit<Transaction, "id">),
       }));
       setTransactions(docs);
-
+      setLoading(false);
       return docs;
     } catch (error) {
+      setLoading(false);
       console.log("error: ", error);
     }
   };

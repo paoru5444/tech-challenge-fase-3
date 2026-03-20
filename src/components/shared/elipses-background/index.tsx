@@ -2,7 +2,11 @@ import { images } from "@/src/constants";
 import React from "react";
 import { Dimensions, Image, View } from "react-native";
 
-export default function ElipsesBackground() {
+export default function ElipsesBackground({
+  children,
+}: {
+  children?: React.ReactNode;
+}) {
   const { width, height } = Dimensions.get("window");
 
   return (
@@ -11,7 +15,7 @@ export default function ElipsesBackground() {
         width,
         height,
         position: "absolute",
-        backgroundColor: "#FDFDFD",
+        backgroundColor: "transparent",
         flex: 1,
       }}
     >
@@ -73,6 +77,8 @@ export default function ElipsesBackground() {
           resizeMode: "cover",
         }}
       />
+
+      {children}
     </View>
   );
 }

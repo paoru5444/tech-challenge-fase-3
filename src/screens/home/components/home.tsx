@@ -1,4 +1,5 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
+import LoadingScreen from "@/src/components/shared/loading-screen";
 import Spacer from "@/src/components/ui/spacer";
 import Typography from "@/src/components/ui/typography";
 import React from "react";
@@ -18,6 +19,7 @@ interface HomeProps {
   openTypesBottomSheet: () => void;
   selectedType: TransactionType;
   lastTransactions: Transaction[];
+  loading: boolean;
 }
 
 export default function Home({
@@ -27,7 +29,12 @@ export default function Home({
   openTypesBottomSheet,
   selectedType,
   lastTransactions,
+  loading,
 }: HomeProps) {
+  if (loading && !chartData?.length) {
+    return <LoadingScreen />;
+  }
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
