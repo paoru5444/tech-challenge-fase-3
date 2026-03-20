@@ -1,3 +1,4 @@
+import error404 from "@/assets/images/404-error.png";
 import darkBlueElispe from "@/assets/images/blur-elipses/dark-blue-elipse.png";
 import greenElispe from "@/assets/images/blur-elipses/green-elipse.png";
 import lightBlueElispe from "@/assets/images/blur-elipses/light-blue-elipse.png";
@@ -38,4 +39,5 @@ export const images = {
   moneyTarget,
   pieChartData,
   bulletsBackground,
+  error404,
 };

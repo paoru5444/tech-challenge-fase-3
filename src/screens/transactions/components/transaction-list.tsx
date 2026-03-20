@@ -1,9 +1,11 @@
 import React from "react";
 
 import ElipsesBackground from "@/src/components/shared/elipses-background";
+import LoadingScreen from "@/src/components/shared/loading-screen";
 import Navbar from "@/src/components/shared/navbar";
 import Badge from "@/src/components/ui/bedge";
 import Input from "@/src/components/ui/input";
+import Spacer from "@/src/components/ui/spacer";
 import Typography from "@/src/components/ui/typography";
 import { icons } from "@/src/constants/icons";
 import { dateFormatter } from "@/src/utils/functions";
@@ -16,9 +18,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import EmptyTransactions from "../../home/components/empty-transactions";
 import { barChartTypes } from "../constants";
 import { Transaction, TransactionsListProps, TransactionType } from "../models";
 import { utils } from "../utils";
+import { images } from "@/src/constants";
 
 export default function TransactionsList({
   search,
@@ -84,6 +88,10 @@ export default function TransactionsList({
 
   const listItemSeparator = () => <View style={{ height: 16 }} />;
 
+  if (loading && !transactions?.length) {
+    return <LoadingScreen />;
+  }
+
   return (
     <View style={{ backgroundColor: "#FDFDFD", paddingHorizontal: 22 }}>
       <ElipsesBackground />
@@ -139,10 +147,12 @@ export default function TransactionsList({
         </View>
       </View>
 
+      <View style={{ height: 16 }} />
+
       <FlatList
         data={transactions}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 32, paddingTop: 16 }}
+        contentContainerStyle={{ paddingBottom: 200, paddingTop: 16 }}
         ItemSeparatorComponent={listItemSeparator}
         keyExtractor={(item) => item?.id}
         showsVerticalScrollIndicator={false}
@@ -150,6 +160,21 @@ export default function TransactionsList({
         onEndReachedThreshold={0.01}
         ListFooterComponent={loading ? listFooterComponent : null}
         keyboardShouldPersistTaps="handled"
+        ListEmptyComponent={() => {
+          const hasSearch = search.length > 0;
+          const title =
+            hasSearch
+              ? "Transação não encontrada"
+              : "Ainda não registrou uma transação?";
+          const description =
+            hasSearch
+              ? "Tente novamente com outro nome"
+              : `Sem problemas, cadastre uma nova transação para serem listadas aqui,
+          com a possibilidade de filtros e gestão de gastos`;
+          const image = hasSearch ? images.error404 : images.officeEmployeeWorkingOvernight
+
+          return <EmptyTransactions title={title} description={description} image={image} />;
+        }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -159,6 +184,8 @@ export default function TransactionsList({
           />
         }
       />
+
+      <Spacer size={100} />
     </View>
   );
 }

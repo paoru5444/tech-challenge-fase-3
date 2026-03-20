@@ -168,6 +168,7 @@ const useTransactions = () => {
       }
 
       if (!transactionRef) {
+        setLoading(false);
         throw new Error("Falha ao configurar o transactionRef");
       }
 
@@ -180,6 +181,7 @@ const useTransactions = () => {
       }));
 
       setTransactions(docs);
+      setLoading(false);
     } catch (error) {
       console.log("Error: ", error);
     } finally {

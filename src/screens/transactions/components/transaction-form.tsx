@@ -94,7 +94,7 @@ export default function TransactionForm({
               }
             }}
             label={isEditing ? "Cancelar" : "Deletar"}
-            style={{ backgroundColor: "red" }}
+            style={{ backgroundColor: "#F06480" }}
             disabled={isSubmitting}
           />
         </View>

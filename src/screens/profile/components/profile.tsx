@@ -1,6 +1,7 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
 import Button from "@/src/components/ui/button";
 import Input from "@/src/components/ui/input";
+import Spacer from "@/src/components/ui/spacer";
 import Typography from "@/src/components/ui/typography";
 import { images } from "@/src/constants";
 import { User } from "firebase/auth";
@@ -14,9 +15,7 @@ interface ProfileProps {
 
 export default function Profile({ user, onLogout }: ProfileProps) {
   return (
-    <ScrollView
-      contentContainerStyle={{ flex: 1, backgroundColor: "red", padding: 16 }}
-    >
+    <ScrollView contentContainerStyle={{ flex: 1, padding: 16 }}>
       <ElipsesBackground />
       <View
         style={{
@@ -43,6 +42,8 @@ export default function Profile({ user, onLogout }: ProfileProps) {
         style={{ backgroundColor: "#F06480" }}
         onPress={onLogout}
       />
+
+      <Spacer />
     </ScrollView>
   );
 }

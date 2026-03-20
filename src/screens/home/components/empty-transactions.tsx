@@ -1,9 +1,16 @@
 import Typography from "@/src/components/ui/typography";
-import { images } from "@/src/constants";
 import React from "react";
 import { Image, View } from "react-native";
 
-export default function EmptyTransactions() {
+export default function EmptyTransactions({
+  title,
+  description,
+  image,
+}: {
+  title: string;
+  description: string;
+  image: any;
+}) {
   return (
     <View
       style={{
@@ -21,17 +28,16 @@ export default function EmptyTransactions() {
       }}
     >
       <Image
-        source={images.officeEmployeeWorkingOvernight}
+        source={image}
         style={{ width: 200, height: 124, resizeMode: "contain" }}
       />
 
       <View style={{ gap: 6 }}>
         <Typography color="#24252C" style={{ textAlign: "center" }}>
-          Ainda não registrou uma transação?
+          {title}
         </Typography>
         <Typography size={12} color="#6E6A7C" style={{ textAlign: "center" }}>
-          Sem problemas, cadastre uma nova transação para serem listadas aqui,
-          com a possibilidade de filtros e gestão de gastos.
+          {description}
         </Typography>
       </View>
     </View>
