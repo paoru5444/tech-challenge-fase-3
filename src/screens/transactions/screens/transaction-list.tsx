@@ -62,10 +62,10 @@ export default function TransactionsListScreen() {
   }, [category, month, year]);
 
   const onEndReached = () => {
-    if (perScroll > transactions.length && transactions.length !== 0) return;
+    if (perScroll > transactions.length) return;
     setPerScroll((prev: number) => prev + TRANSACTIONS_PER_PAGE);
   };
-  console.log("re-render");
+
   return (
     <TransactionsListComponent
       search={search}
