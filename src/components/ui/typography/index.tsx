@@ -29,12 +29,23 @@ export default function Typography({
   size = 14,
   ...rest
 }: TypographyProps) {
+  const selectedFontFamily = {
+    "400": "Lexend Deca",
+    "500": "Lexend Deca Medium",
+    "600": "Lexend Deca SemiBold",
+    "700": "Lexend Deca Bold",
+  };
   return (
     <Text
       style={[
         styles.text,
         style,
-        { fontWeight: weight, fontSize: size, color: color },
+        {
+          fontFamily: selectedFontFamily[weight],
+          fontWeight: weight,
+          fontSize: size,
+          color: color,
+        },
       ]}
       {...rest}
     >

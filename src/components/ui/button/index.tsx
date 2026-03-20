@@ -37,9 +37,9 @@ export default function Button({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#5F33E1",
+    backgroundColor: "#7B61E8",
     height: 50,
-    borderRadius: 15,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
   },

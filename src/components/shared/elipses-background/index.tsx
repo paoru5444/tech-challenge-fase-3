@@ -12,18 +12,21 @@ export default function ElipsesBackground() {
         height,
         position: "absolute",
         backgroundColor: "#FDFDFD",
+        flex: 1,
       }}
     >
-      <Image
-        source={images.greenElispe}
-        style={{
-          width: 200,
-          height: 200,
-          left: -50,
-          bottom: -10,
-          resizeMode: "cover",
-        }}
-      />
+      <View style={{ alignItems: "flex-end" }}>
+        <Image
+          source={images.greenElispe}
+          style={{
+            width: 200,
+            height: 200,
+            right: -30,
+            bottom: -20,
+            resizeMode: "cover",
+          }}
+        />
+      </View>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Image
