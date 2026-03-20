@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "tech-challenge-fase-3",
+    "name": "Orçamento Simples",
     "slug": "tech-challenge-fase-3",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/deposit.png",
+    "icon": "./assets/config/app-icon.png",
     "scheme": "techchallengefase3",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,10 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/deposit.png",
-        "backgroundImage": "./assets/images/withdraw.png",
-        "monochromeImage": "./assets/images/trasnfer.png"
+        "backgroundColor": "#fff"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -25,20 +22,17 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/logo.png"
+      "favicon": "./assets/config/app-icon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "image": "./assets/config/splash-screen.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
+          "imageWidth": "100%"
         }
       ],
       "expo-secure-store",
