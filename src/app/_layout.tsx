@@ -7,6 +7,9 @@ import { AuthProvider } from "../context/auth.context";
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     "Lexend Deca": require("@/assets/fonts/lexend-deca/LexendDeca-Regular.ttf"),
+    "Lexend Deca Medium": require("@/assets/fonts/lexend-deca/LexendDeca-Medium.ttf"),
+    "Lexend Deca Semi Bold": require("@/assets/fonts/lexend-deca/LexendDeca-SemiBold.ttf"),
+    "Lexend Deca Bold": require("@/assets/fonts/lexend-deca/LexendDeca-Regular.ttf"),
   });
 
   if (!fontsLoaded) return null;
@@ -14,7 +17,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <SafeAreaView
-        style={{ flex: 1, backgroundColor: "#FDFDFD" }}
+        style={{ flex: 1, backgroundColor: "transparent" }}
         edges={["top"]}
       >
         <Slot />

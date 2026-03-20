@@ -1,5 +1,4 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
-import Spacer from "@/src/components/ui/spacer";
 import Typography from "@/src/components/ui/typography";
 import React from "react";
 import { ScrollView, View } from "react-native";
@@ -70,8 +69,6 @@ export default function Home({
           />
         </View>
       )}
-
-      <Spacer />
     </ScrollView>
   );
 }

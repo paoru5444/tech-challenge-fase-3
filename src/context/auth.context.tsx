@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   User,
 } from "firebase/auth";
-import {
+import React, {
   createContext,
   ReactNode,
   useContext,
@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const user = await signInWithEmailAndPassword(auth, email, password);
       setUser(user.user);
       setLoading(false);
-      router.replace("/(app)");
+      router.replace("/(app)/(tabs)");
     } catch (error) {
       console.log("Erro ao logar: ", error);
       setLoading(false);

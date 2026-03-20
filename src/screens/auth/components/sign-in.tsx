@@ -37,7 +37,7 @@ export default function SignIn({
 
       <View style={styles.content}>
         <View>
-          <Typography size={24} weight="600">
+          <Typography size={24} weight="500">
             Olá novamente 👋
           </Typography>
           <Typography size={14}>Entre na sua conta!</Typography>

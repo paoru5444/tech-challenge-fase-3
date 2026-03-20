@@ -41,7 +41,7 @@ export default function SignUp({
         }}
       >
         <View>
-          <Typography size={24} weight="600">
+          <Typography size={24} weight="500">
             Que bom te conhecer 👋
           </Typography>
           <Typography size={14}>Crie sua conta!</Typography>
