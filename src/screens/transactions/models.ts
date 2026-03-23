@@ -82,6 +82,7 @@ export interface TransactionFormProps {
   openCalendarBottomSheet: () => void;
   isEditing: boolean;
   setIsEditing: (value: boolean) => void;
+  setIsReadOnly: (value: boolean) => void;
   control: Control<FormDataProps>;
   errors: FieldErrors<FormDataProps>;
   handleGetFile: () => void;

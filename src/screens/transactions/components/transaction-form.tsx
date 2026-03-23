@@ -19,6 +19,7 @@ export default function TransactionForm({
   openCalendarBottomSheet,
   isEditing,
   setIsEditing,
+  setIsReadOnly,
   control,
   errors,
   isSubmitting,
@@ -77,6 +78,7 @@ export default function TransactionForm({
             onPress={() => {
               if (!isEditing) {
                 setIsEditing(true);
+                setIsReadOnly(false);
               } else {
                 onUpdate();
               }
@@ -89,6 +91,7 @@ export default function TransactionForm({
             onPress={() => {
               if (isEditing) {
                 setIsEditing(false);
+                setIsReadOnly(true);
               } else {
                 onDelete();
               }

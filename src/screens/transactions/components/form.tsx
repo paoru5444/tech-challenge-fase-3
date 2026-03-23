@@ -53,7 +53,7 @@ export default function Form({
         alignItems: "center",
       }}
     >
-      <Typography size={24} weight="800">
+      <Typography size={24} weight="600">
         {pageTitle}
       </Typography>
     </View>
@@ -67,6 +67,7 @@ export default function Form({
       editable={!disableFields}
       name={item.key}
       error={errors[item?.key]}
+      keyboardType={item?.key === "amount" ? "numeric" : "default"}
     />
   );
 

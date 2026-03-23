@@ -3,7 +3,7 @@ import { useUpload } from "@/src/hooks/useUploadFile";
 import { formInSchema } from "@/src/schemas/transaction-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
 import TransactionForm from "../components/transaction-form";
@@ -19,14 +19,15 @@ import {
 export default function TransactionFormScreen() {
   const [isEditing, setIsEditing] = useState(false);
   const { getFile, file, blob } = useUpload();
-  const { selectedCategory, selectedDate } = useTransactionsContext();
+  const { selectedCategory, selectedDate, resetDate, resetCategory } =
+    useTransactionsContext();
   const { addTransactions, deleteTransaction, updateTransaction } =
     useTransactions();
   const localSearchParams =
     useLocalSearchParams<TransactionFormScreenLocalSearchParams>();
+  const [isReadOnly, setIsReadOnly] = useState(localSearchParams?.mode === "view");
 
   const type = localSearchParams.type ?? "deposit";
-  const isReadOnly = localSearchParams?.mode === "view";
 
   const formType = FORM_TYPES[type];
 
@@ -70,7 +71,6 @@ export default function TransactionFormScreen() {
 
   const onCreate = (data: onCreateTransaction) => {
     Keyboard.dismiss();
-    console.log("onCreate data: ", data);
 
     addTransactions(
       {
@@ -81,25 +81,30 @@ export default function TransactionFormScreen() {
       blob,
     );
 
-    router.replace("/transactions/list");
+    resetCategory();
+    resetDate();
+
+    router.replace("/(app)/(tabs)");
   };
 
   const onDelete = () => {
     deleteTransaction(localSearchParams.id);
-    router.replace("/transactions/list");
+    router.replace("/(app)/(tabs)/transactions-list");
   };
 
   const onUpdate = (data: onUpdateTransaction) => {
     Keyboard.dismiss();
     updateTransaction(localSearchParams.id, data);
-    router.replace("/transactions/list");
+    router.replace("/(app)/(tabs)/transactions-list");
   };
 
   const openCategoryBottomSheet = () => {
+    resetCategory();
     router.push("/categories-bottom-sheet");
   };
 
   const openCalendarBottomSheet = () => {
+    resetDate();
     router.push("/calendar-bottom-sheet");
   };
 
@@ -107,10 +112,22 @@ export default function TransactionFormScreen() {
     getFile();
   };
 
-  const pageTitle = {
+  const pageTitleOptions = {
     create: "Registrar nova\n" + formType.navbarLabel,
     update: "Atualizar\n" + formType.navbarLabel,
+    view: "Detalhes da\n" + formType.navbarLabel,
   };
+
+  const pageTitle = useMemo(() => {
+    console.log("isReadOnly: ", isReadOnly);
+    if (isReadOnly) {
+      return pageTitleOptions["view"];
+    } else if (isEditing) {
+      return pageTitleOptions["update"];
+    } else {
+      return pageTitleOptions["create"];
+    }
+  }, [isEditing, isReadOnly, pageTitleOptions]);
 
   return (
     <TransactionForm
@@ -123,11 +140,12 @@ export default function TransactionFormScreen() {
       openCalendarBottomSheet={openCalendarBottomSheet}
       isEditing={isEditing}
       setIsEditing={setIsEditing}
+      setIsReadOnly={setIsReadOnly}
       control={control}
       errors={errors}
       setValue={setValue}
       isSubmitting={isSubmitting}
-      pageTitle={pageTitle[isEditing ? "update" : "create"]}
+      pageTitle={pageTitle}
       handleGetFile={handleGetFile}
       file={file}
       isReadOnly={isReadOnly}
