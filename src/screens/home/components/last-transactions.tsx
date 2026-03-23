@@ -1,9 +1,9 @@
 import Typography from "@/src/components/ui/typography";
-import { icons } from "@/src/constants/icons";
 import { dateFormatter } from "@/src/utils/functions";
 import React from "react";
 import { Image, View } from "react-native";
 import { Transaction } from "../../transactions/models";
+import { utils } from "../../transactions/utils";
 
 const typeColors = {
   deposit: "#ECFFE8",
@@ -45,7 +45,10 @@ export default function LastTransactions({
                 justifyContent: "center",
               }}
             >
-              <Image source={icons.deposit} style={{ width: 40, height: 40 }} />
+              <Image
+                source={utils.pickTransactionTypeIcon(transaction?.type)}
+                style={{ width: 40, height: 40 }}
+              />
             </View>
 
             <View>
