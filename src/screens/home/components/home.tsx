@@ -1,10 +1,10 @@
 import ElipsesBackground from "@/src/components/shared/elipses-background";
 import LoadingScreen from "@/src/components/shared/loading-screen";
+import Navbar from "@/src/components/shared/navbar";
 import Spacer from "@/src/components/ui/spacer";
 import Typography from "@/src/components/ui/typography";
 import React from "react";
 import { ScrollView, View } from "react-native";
-import Navbar from "../../../components/shared/navbar";
 import { FORM_TYPES } from "../../transactions/constants";
 import { Transaction, TransactionType } from "../../transactions/models";
 import Analytics from "./analytics";
@@ -67,14 +67,11 @@ export default function Home({
         )}
       </View>
 
-      {lastTransactions.length && (
+      {!!lastTransactions.length && (
         <View style={{ gap: 16 }}>
           <Typography weight="600">Ulitmas Transações</Typography>
 
-          <LastTransactions
-            lastTransactions={lastTransactions}
-            selectedType={selectedType}
-          />
+          <LastTransactions lastTransactions={lastTransactions} />
         </View>
       )}
 

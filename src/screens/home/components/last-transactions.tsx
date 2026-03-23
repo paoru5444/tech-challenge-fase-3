@@ -3,7 +3,7 @@ import { icons } from "@/src/constants/icons";
 import { dateFormatter } from "@/src/utils/functions";
 import React from "react";
 import { Image, View } from "react-native";
-import { Transaction, TransactionType } from "../../transactions/models";
+import { Transaction } from "../../transactions/models";
 
 const typeColors = {
   deposit: "#ECFFE8",
@@ -13,10 +13,8 @@ const typeColors = {
 
 export default function LastTransactions({
   lastTransactions,
-  selectedType,
 }: {
   lastTransactions: Transaction[];
-  selectedType: TransactionType;
 }) {
   return (
     <>
@@ -49,11 +47,9 @@ export default function LastTransactions({
             >
               <Image source={icons.deposit} style={{ width: 40, height: 40 }} />
             </View>
-            {/* <Image source={images.deposit} style={{ width: 34, height: 34 }} /> */}
 
             <View>
               <Typography size={12} style={{ fontWeight: 600 }}>
-                {/* {transaction.description.substr(0, 15)}... */}
                 {transaction.description}
               </Typography>
               <Typography size={11} color="gray">
