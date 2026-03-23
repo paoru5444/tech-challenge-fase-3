@@ -7,6 +7,11 @@ const useBalance = ({ transactions }: { transactions: Transaction[] }) => {
       if (!item.amount) {
         return acc;
       }
+
+      if (item.type !== "deposit") {
+        return acc - parseFloat(item.amount);
+      }
+
       return acc + parseFloat(item.amount);
     }, 0);
   }, [transactions]).toFixed(2);
