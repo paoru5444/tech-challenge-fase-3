@@ -11,6 +11,8 @@ interface TransactionsContextType {
   handleSelectedType: (type: TransactionType) => void;
   chartData: any;
   fetchChartData: (type: TransactionType) => void;
+  resetDate: () => void;
+  resetCategory: () => void;
 }
 
 const TransactionsContext = createContext<TransactionsContextType | null>(null);
@@ -37,7 +39,7 @@ export function TransactionsProvider({
     value: "",
   });
 
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedType, setSelectedType] = useState(TransactionType.ALL);
   const { chartData, getCharData } = useAnalytics();
 
@@ -58,6 +60,17 @@ export function TransactionsProvider({
     setSelectedType(type);
   }
 
+  function resetDate() {
+    setSelectedDate(new Date());
+  }
+
+  function resetCategory() {
+    setSelectedCategory({
+      key: "",
+      value: "",
+    });
+  }
+
   return (
     <TransactionsContext.Provider
       value={{
@@ -69,6 +82,8 @@ export function TransactionsProvider({
         handleSelectedType,
         chartData,
         fetchChartData,
+        resetDate,
+        resetCategory,
       }}
     >
       {children}
