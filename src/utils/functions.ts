@@ -11,6 +11,7 @@ const months = [
   "Fevereiro",
   "Março",
   "Abril",
+  "Maio",
   "Junho",
   "Julho",
   "Agosto",
@@ -22,7 +23,7 @@ const months = [
 export const dateFormatter = (date: string) => {
   const parsedDate = new Date(date);
   const day = String(parsedDate.getDate()).padStart(2, "0");
-  const month = parsedDate.getMonth() + 1;
+  const month = parsedDate.getMonth();
   const year = parsedDate.getFullYear();
 
   return `${day} de ${months[month]}, ${year}`;
