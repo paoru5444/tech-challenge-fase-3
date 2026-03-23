@@ -8,7 +8,7 @@ const pickTransactionTypeIcon = (type: TransactionType) => {
     return icons.withdraw;
   }
 
-  return icons.deposit;
+  return icons.transfer;
 };
 
 export const utils = {
