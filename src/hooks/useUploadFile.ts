@@ -1,8 +1,6 @@
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useState } from "react";
-import DocumentPicker, {
-  DocumentPickerResponse,
-} from "react-native-document-picker";
+import { pick, types, keepLocalCopy } from "@react-native-documents/picker";
 import { useAuth } from "../context/auth.context";
 import { File } from "../screens/transactions/models";
 
@@ -20,12 +18,21 @@ export function useUpload() {
 
   const getFile = async () => {
     try {
-      const result: DocumentPickerResponse = await DocumentPicker.pickSingle({
+      const [result] = await pick({
         allowMultiSelection: false,
-        type: [DocumentPicker.types.pdf, DocumentPicker.types.images],
+        type: [types.pdf, types.images],
       });
 
-      const response = (await fetch(result.uri)) as FechFileResponse;
+      const [localCopy] = await keepLocalCopy({
+        files: [{ uri: result.uri, fileName: result.name ?? "file" }],
+        destination: "cachesDirectory",
+      });
+
+      if (localCopy.status === "error") {
+        throw new Error(localCopy.copyError);
+      }
+
+      const response = (await fetch(localCopy.localUri)) as FechFileResponse;
 
       const blob: Blob = await response.blob();
 
