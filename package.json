@@ -1,6 +1,10 @@
 {
   "name": "tech-challenge-fase-3",
   "main": "expo-router/entry",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/paoru5444/tech-challenge-fase-3"
+  },
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
