@@ -29,12 +29,22 @@ Uma ferramenta simples e produtiva desenvolvida para ser o seu aliado, e ajudar 
 </div>
 
 ---
+### Links:
+- **Repo**: https://github.com/paoru5444/tech-challenge-fase-3
+- **Figma**: https://www.figma.com/design/UcuHjUu120gHwTIFDZBrV5/Or%C3%A7amento-Simples?node-id=0-1&t=y2hudG4BATBZr4KK-1
+---
 
 ## Como começar
+
 
 1. Instale as dependências
 ```bash
    npm install
+```
+
+1. Faça um Pré Build
+```bash
+   npx expo prebuild --clean
 ```
 
 2. Inicie o app
@@ -50,6 +60,12 @@ Na saída do terminal, você encontrará opções para abrir o app em:
 - [Expo Go](https://expo.dev/go), uma sandbox limitada para experimentar o desenvolvimento com Expo
 
 Você pode começar a desenvolver editando os arquivos dentro do diretório **app**. Este projeto utiliza [roteamento baseado em arquivos](https://docs.expo.dev/router/introduction).
+
+---
+
+### Sobre o upload de arquivos no dispositivo android:
+
+- A configuração do firebase usando o web ensinado em aula causa problemas quando o update acontece no android, aparentemente, o android bloqueia o fetch sob arquivos do dispositivo por questões de segurança, impossibilitando a geração de um blob para passar ao firebase no upload. Para a continuidade do projeto, vou migrar para o react-native-firebase, que lida melhor com esas questões de arquivos locais.
 
 ---
 
@@ -116,6 +132,7 @@ Essa estrutura torna o projeto preparado para crescer, seja para a adição de *
 - Adicionar ferramenta de Tracking e Monitoramento como o Sentry
 - Subir a aplicação no Google Play e na App Store
 - Adicionar EAS para OTA Updates
+- Usar react-native-firebase
 
 ---
 
