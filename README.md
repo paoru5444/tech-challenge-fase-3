@@ -47,10 +47,23 @@ Uma ferramenta simples e produtiva desenvolvida para ser o seu aliado, e ajudar 
    npx expo prebuild --clean
 ```
 
-2. Inicie o app
+2. Inicie o app com android
+```bash
+   npx expo run:android
+```
+
+2. Ou inicie o app com ios
+```bash
+   npx expo run:ios
+```
+
+2. Após fazer o build inicial, basta iniciar o expo
 ```bash
    npx expo start
 ```
+
+Obs: As configurações do firebase já estão no projeto.
+
 
 Na saída do terminal, você encontrará opções para abrir o app em:
 
@@ -133,6 +146,7 @@ Essa estrutura torna o projeto preparado para crescer, seja para a adição de *
 - Subir a aplicação no Google Play e na App Store
 - Adicionar EAS para OTA Updates
 - Usar react-native-firebase
+- Adicionar .env para proteger as secrets da aplicação
 
 ---
 
