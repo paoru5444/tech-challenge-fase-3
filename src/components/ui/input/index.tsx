@@ -10,6 +10,7 @@ interface InputProps extends TextInputProps {
     message?: string;
   } | null;
   name?: string;
+  disablePaddingVertical?: boolean;
 }
 
 export default function Input({
@@ -24,6 +25,7 @@ export default function Input({
   control,
   error,
   name = "",
+  disablePaddingVertical,
   ...rest
 }: InputProps) {
   return (
@@ -32,7 +34,7 @@ export default function Input({
         gap: 6,
         backgroundColor: "#fff",
         paddingHorizontal: 16,
-        paddingVertical: 16,
+        paddingVertical: disablePaddingVertical ? 0 : 16,
         borderRadius: 15,
         elevation: 5,
         shadowColor: "#000",

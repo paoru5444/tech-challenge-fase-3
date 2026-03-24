@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Platform,
   RefreshControl,
   TouchableOpacity,
   View,
@@ -111,6 +112,7 @@ export default function TransactionsList({
               placeholder="Search Transaction"
               value={search}
               onChangeText={handleSearchChange}
+              disablePaddingVertical={Platform.OS === "android"}
             />
           </View>
 
@@ -162,18 +164,24 @@ export default function TransactionsList({
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={() => {
           const hasSearch = search.length > 0;
-          const title =
-            hasSearch
-              ? "Transação não encontrada"
-              : "Ainda não registrou uma transação?";
-          const description =
-            hasSearch
-              ? "Tente novamente com outro nome"
-              : `Sem problemas, cadastre uma nova transação para serem listadas aqui,
+          const title = hasSearch
+            ? "Transação não encontrada"
+            : "Ainda não registrou uma transação?";
+          const description = hasSearch
+            ? "Tente novamente com outro nome"
+            : `Sem problemas, cadastre uma nova transação para serem listadas aqui,
           com a possibilidade de filtros e gestão de gastos`;
-          const image = hasSearch ? images.error404 : images.officeEmployeeWorkingOvernight
+          const image = hasSearch
+            ? images.error404
+            : images.officeEmployeeWorkingOvernight;
 
-          return <EmptyTransactions title={title} description={description} image={image} />;
+          return (
+            <EmptyTransactions
+              title={title}
+              description={description}
+              image={image}
+            />
+          );
         }}
         refreshControl={
           <RefreshControl
