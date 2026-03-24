@@ -7,6 +7,7 @@ import { Control, FieldErrors } from "react-hook-form";
 import {
   FlatList,
   Image,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -135,20 +136,42 @@ export default function Form({
                 backgroundColor: file?.name ? "#E5FAEA" : "#fff",
               },
             ]}
+            disabled={Platform.OS === "android"}
           >
-            <Image source={icons.fileUpload} style={styles.footerIcon} />
+            {Platform.OS === "android" ? (
+              <>
+                <Image source={icons.fileUpload} style={styles.footerIcon} />
+                <View>
+                  <Typography weight="500" size={12}>
+                    Upload para Android desativado, tente no iOS.
+                  </Typography>
 
-            <View>
-              <Typography weight="500" size={12}>
-                {file?.name ?? "Enviar arquivo"}
-              </Typography>
+                  {!file?.name && (
+                    <Typography weight="400" size={10}>
+                      Acesso via fetch/XHR aos diretórios Android bloqueando.
+                      {`\n`}
+                      Use um dispositivo iOS, mais detalhes no Readme
+                    </Typography>
+                  )}
+                </View>
+              </>
+            ) : (
+              <>
+                <Image source={icons.fileUpload} style={styles.footerIcon} />
 
-              {!file?.name && (
-                <Typography weight="500" size={12} color="#E5E5EA">
-                  Imagens, PDF ou documentos
-                </Typography>
-              )}
-            </View>
+                <View>
+                  <Typography weight="500" size={12}>
+                    {file?.name ?? "Enviar arquivo"}
+                  </Typography>
+
+                  {!file?.name && (
+                    <Typography weight="500" size={12} color="#E5E5EA">
+                      Imagens, PDF ou documentos
+                    </Typography>
+                  )}
+                </View>
+              </>
+            )}
           </TouchableOpacity>
         )}
     </View>
