@@ -25,7 +25,9 @@ export default function TransactionFormScreen() {
     useTransactions();
   const localSearchParams =
     useLocalSearchParams<TransactionFormScreenLocalSearchParams>();
-  const [isReadOnly, setIsReadOnly] = useState(localSearchParams?.mode === "view");
+  const [isReadOnly, setIsReadOnly] = useState(
+    localSearchParams?.mode === "view",
+  );
 
   const type = localSearchParams.type ?? "deposit";
 
@@ -69,10 +71,10 @@ export default function TransactionFormScreen() {
     selectedDate,
   ]);
 
-  const onCreate = (data: onCreateTransaction) => {
+  const onCreate = async (data: onCreateTransaction) => {
     Keyboard.dismiss();
 
-    addTransactions(
+    await addTransactions(
       {
         ...data,
         type: localSearchParams.type,
@@ -87,14 +89,14 @@ export default function TransactionFormScreen() {
     router.replace("/(app)/(tabs)");
   };
 
-  const onDelete = () => {
-    deleteTransaction(localSearchParams.id);
+  const onDelete = async () => {
+    await deleteTransaction(localSearchParams.id);
     router.replace("/(app)/(tabs)/transactions-list");
   };
 
-  const onUpdate = (data: onUpdateTransaction) => {
+  const onUpdate = async (data: onUpdateTransaction) => {
     Keyboard.dismiss();
-    updateTransaction(localSearchParams.id, data);
+    await updateTransaction(localSearchParams.id, data, file, blob);
     router.replace("/(app)/(tabs)/transactions-list");
   };
 
@@ -119,7 +121,6 @@ export default function TransactionFormScreen() {
   };
 
   const pageTitle = useMemo(() => {
-    console.log("isReadOnly: ", isReadOnly);
     if (isReadOnly) {
       return pageTitleOptions["view"];
     } else if (isEditing) {

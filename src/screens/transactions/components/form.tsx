@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import {
   File,
+  FORM_MODE,
   FormDataProps,
   TransactionFormItem,
   TransactionFormLocalSearchParams,
@@ -30,6 +31,7 @@ interface FormProps {
   handleGetFile: () => void;
   file: File | null;
   isReadOnly: boolean;
+  isEditing: boolean;
   localSearchParams?: TransactionFormLocalSearchParams;
 }
 
@@ -44,6 +46,7 @@ export default function Form({
   handleGetFile,
   file,
   isReadOnly,
+  isEditing,
   localSearchParams,
 }: FormProps) {
   const headerComponent = () => (
@@ -93,23 +96,24 @@ export default function Form({
         disableFields={disableFields}
       />
 
-      <TouchableOpacity
-        onPress={handleGetFile}
-        style={[
-          styles.footerUploadCard,
-          {
-            borderColor: file?.name ? "#09CF35" : "#E5E5EA",
-            backgroundColor: file?.name ? "#E5FAEA" : "#fff",
-          },
-        ]}
-      >
-        {isReadOnly ? (
+      {isReadOnly && !!localSearchParams?.fileName && (
+        <TouchableOpacity
+          onPress={handleGetFile}
+          style={[
+            styles.footerUploadCard,
+            {
+              borderColor: "#E5E5EA",
+              backgroundColor: "#fff",
+            },
+          ]}
+          disabled={true}
+        >
           <>
-            <Image source={icons.fileDownload} style={styles.footerIcon} />
+            <Image source={icons.fileUpload} style={styles.footerIcon} />
 
             <View>
               <Typography weight="500" size={12}>
-                {"Fazer download arquivo"}
+                {"Arquivo:"}
               </Typography>
 
               <Typography weight="500" size={12}>
@@ -117,8 +121,21 @@ export default function Form({
               </Typography>
             </View>
           </>
-        ) : (
-          <>
+        </TouchableOpacity>
+      )}
+
+      {!isReadOnly &&
+        (isEditing || localSearchParams?.mode === FORM_MODE.CREATE) && (
+          <TouchableOpacity
+            onPress={handleGetFile}
+            style={[
+              styles.footerUploadCard,
+              {
+                borderColor: file?.name ? "#09CF35" : "#E5E5EA",
+                backgroundColor: file?.name ? "#E5FAEA" : "#fff",
+              },
+            ]}
+          >
             <Image source={icons.fileUpload} style={styles.footerIcon} />
 
             <View>
@@ -132,9 +149,8 @@ export default function Form({
                 </Typography>
               )}
             </View>
-          </>
+          </TouchableOpacity>
         )}
-      </TouchableOpacity>
     </View>
   );
 

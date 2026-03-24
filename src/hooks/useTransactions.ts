@@ -98,15 +98,26 @@ const useTransactions = () => {
   const updateTransaction = async (
     transactionId?: string,
     transaction?: FormDataProps,
+    file?: any,
+    blob?: any,
   ) => {
     try {
       if (!transactionId || !transaction) {
         throw new Error("TransactionId ou Transação recebidos são inválidos");
       }
 
+      const payload = { ...transaction };
+
+      if (file && blob) {
+        const uploadedFile = await uploadFile({ transactionId, file, blob });
+
+        payload.fileUrl = uploadedFile?.url;
+        payload.fileName = file?.name;
+      }
+
       await updateDoc(
         doc(db, "users", user?.uid ?? "", "transactions", transactionId),
-        transaction,
+        { ...payload },
       );
     } catch (error) {}
   };
@@ -180,7 +191,7 @@ const useTransactions = () => {
         ...(doc.data() as Omit<Transaction, "id">),
       }));
 
-      setTransactions(docs);
+      setTransactions([...docs]);
       setLoading(false);
     } catch (error) {
       console.log("Error: ", error);

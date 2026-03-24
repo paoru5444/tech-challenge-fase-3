@@ -27,6 +27,7 @@ export default function TransactionForm({
   handleGetFile,
   file,
   isReadOnly,
+  loading,
 }: TransactionFormProps) {
   return (
     <View
@@ -54,11 +55,17 @@ export default function TransactionForm({
         handleGetFile={handleGetFile}
         file={file}
         isReadOnly={isReadOnly}
+        isEditing={isEditing}
         localSearchParams={localSearchParams}
       />
 
       {localSearchParams?.mode === FORM_MODE.CREATE && (
-        <Button onPress={onCreate} label={"Salvar"} disabled={isSubmitting} />
+        <Button
+          onPress={onCreate}
+          label={"Salvar"}
+          disabled={isSubmitting || loading}
+          isLoading={loading}
+        />
       )}
 
       {localSearchParams?.mode === FORM_MODE.UPDATE && (
@@ -68,7 +75,8 @@ export default function TransactionForm({
             router.back();
           }}
           label={"Salvar"}
-          disabled={isSubmitting}
+          disabled={isSubmitting || loading}
+          isLoading={loading}
         />
       )}
 
@@ -84,7 +92,8 @@ export default function TransactionForm({
               }
             }}
             label={isEditing ? "Salvar" : "Atualizar"}
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
+            isLoading={loading}
           />
 
           <Button
@@ -98,7 +107,8 @@ export default function TransactionForm({
             }}
             label={isEditing ? "Cancelar" : "Deletar"}
             style={{ backgroundColor: "#F06480" }}
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
+            isLoading={loading}
           />
         </View>
       )}

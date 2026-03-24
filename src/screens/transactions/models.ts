@@ -55,6 +55,8 @@ export type FormDataProps = {
   description: string;
   date: string;
   category: CategoryType;
+  fileUrl?: string;
+  fileName?: string;
 };
 
 export type FormTypeProps = {
@@ -90,6 +92,7 @@ export interface TransactionFormProps {
   pageTitle: string;
   file: File | null;
   isReadOnly: boolean;
+  loading: boolean;
   setValue: UseFormSetValue<FormDataProps>;
 }
 
