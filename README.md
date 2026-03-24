@@ -116,3 +116,7 @@ Essa estrutura torna o projeto preparado para crescer, seja para a adição de *
 - Adicionar ferramenta de Tracking e Monitoramento como o Sentry
 - Subir a aplicação no Google Play e na App Store
 - Adicionar EAS para OTA Updates
+
+---
+
+- Desenvolvido com o ❤️
